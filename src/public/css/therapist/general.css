@@ -1,0 +1,24 @@
+body {
+    display: flex;
+    flex-direction: row;
+}
+
+.main-section {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.header-section {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding-inline-start: 20px;
+    height: 120px;
+}
+
+.header-section h4 {
+    margin-top: 0;
+    color: #8f8f8f;
+    font-weight: lighter;
+}

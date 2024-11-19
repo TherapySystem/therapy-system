@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'NotoFont';
+    src: url('../fonts/NotoSans-Regular.ttf') format('truetype');
+}
+
+html, body {
+    font-family: "NotoFont", sans-serif;
+    padding: 0px;
+    margin: 0px;
+}
+
+body {
+    background-color: #fff;
+}

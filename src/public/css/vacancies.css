@@ -1,0 +1,53 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.job-item {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    height: max-content;
+    min-height: 180px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.job-image {
+    background-image: url('/images/placeholder.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    min-width: 30%;
+    
+}
+
+.job-details {
+    flex-grow: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-left: 20px;
+}
+
+@media (max-width: 769px) {
+    .job-item {
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: row;
+        width: 80%;
+        height: max-content;
+        min-height: 180px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .job-image {
+        height: 200px;
+        width: 320px;
+        flex-grow: 0;
+        margin-inline: auto;
+    }
+}

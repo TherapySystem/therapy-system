@@ -1,0 +1,130 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.main-container > h3 {
+    text-align: center;
+}
+
+.main-container > div {
+    padding: 20px;
+}
+
+.patient-fields {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+@media (max-width: 769px) {
+
+    .patient-fields {
+        flex-wrap: wrap;
+        gap: 0px;
+    }
+    
+}
+
+.parent-account-fields {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.parent-fields {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+@media (max-width: 769px) {
+
+    .parent-account-fields {
+        flex-wrap: wrap;
+        gap: 0px;
+    }
+
+    .parent-fields {
+        flex-wrap: wrap;
+        gap: 0px;
+    }
+    
+}
+
+.input-container {
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+}
+  
+.input-container input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #575757;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+  
+.input-container label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #575757;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.3s ease all;
+}
+  
+.input-container input:focus {
+    border-color: #4b8127;
+}
+  
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label {
+    top: 0;
+    font-size: 13px;
+    color: #4b8127;
+    background-color: #fff;
+    padding: 5px;
+}
+  
+.input-container input:focus {
+    outline: none;
+}
+
+.registration-note {
+    font-weight: bold; 
+    font-style: italic; 
+    padding-inline: 40px; 
+    font-size: 12px; 
+    text-align: center;
+}
+
+.submit-registration {
+    width: 120px;
+    height: 40px;
+    padding-inline: 16px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #4b8127;
+    margin-inline: auto;
+    margin-bottom: 50px;
+    margin-top: 30px;
+    border: 3px solid #4b8127;
+    border-radius: 12px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-registration:hover {
+    background-color: #4b8127;
+    color: #fff;
+    transition: all 0.3s ease;
+}

@@ -1,0 +1,123 @@
+.sidebar {
+    width: 20vw;
+    height: 100vh;
+    background-color: #b2f3cb;
+}
+.brand-section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: #20aa6a;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.brand-section img {
+    width: 70px;
+    height: 70px;
+}
+
+.brand-section h4 {
+    font-size: 90%;
+    margin: 0;
+    text-align: center;
+    color: #f5f8d8;
+    padding-inline: 10px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    align-content: start;
+    height: 50px;
+    padding-inline-start: 10px;
+    cursor: pointer;
+    /* background-color: #202123; */
+    color: #0f6d2e;
+    transition: all 0.3s ease;
+}
+
+.menu-group {
+    display: flex;
+    flex-direction: column;
+    max-height: 50px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+    color: #fff;
+    background-color: #04aa6d;
+}
+
+.active-menu-item {
+    color: #fff;
+    background-color: #04aa6d;
+}
+
+.menu-item svg {
+    width: 35px;
+    height: 50px;
+    stroke: #0f6d2e;
+    fill: #0f6d2e;
+    transition: all 0.3s ease;
+}
+
+.menu-item:hover svg {
+    stroke: #fff;
+    fill: #fff;
+}
+
+.active-menu-item svg {
+    stroke: #fff;
+    fill: #fff;
+}
+
+.menu-item h4 {
+    font-size: 90%;
+    margin: 0;
+    text-align: center;
+    padding-inline-start: 10px;
+    font-weight: lighter;
+    display: flex;
+    flex-direction: row;
+    justify-content: baseline;
+    align-items: baseline;
+    align-items: baseline;
+}
+
+.menu-item .arrow-down {
+    width: 12px;
+    height: 12px;
+    margin-top: 2px;
+    margin-left: 20px;
+}
+
+.sub-menu {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+    color: #1fa74c;
+}
+
+.sub-menu-item {
+    padding-left: 60px;
+    padding-bottom: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sub-menu-item:hover {
+    color: #0f6d2e;
+}

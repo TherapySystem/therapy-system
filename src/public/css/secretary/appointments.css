@@ -1,0 +1,123 @@
+.content-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.headbar {
+    display: flex;
+    flex-direction: row;
+    margin-inline: 25px;
+    margin-bottom: 10px;
+}
+
+.headbar .action {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+#new-appointment {
+    width: 25px;
+    height: 25px;
+    background-color: #12a80d;
+    padding: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#new-appointment:hover {
+    background-color: #0f800b;
+}
+  
+.search-input {
+    width: 200px;
+    padding: 8px;
+    margin-right: 5px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 14px;
+}
+  
+.search-button {
+    padding: 8px 16px;
+    border: none;
+    background-color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #20794c;
+    border: 1px solid #20794c;
+    transition: all 0.3s ease;
+}
+  
+.search-button:hover {
+    background-color: #20794c;
+    color: #fff;
+}
+
+.table-section {
+    flex-grow: 1;
+    margin-inline: 25px;
+}
+
+.appointment-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.appointment-table tbody tr {
+    border-top: 0.5px solid #AEBAC3;
+    transition: box-shadow 0.1s ease;
+}
+
+.appointment-table tbody tr:hover {
+    box-shadow: inset 5px 0 0 0 #35a564, inset -5px 0 0 0 #35a564;
+}
+  
+.appointment-table th {
+    text-align: left;
+    font-weight: lighter;
+    padding-inline: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #20794c;
+}
+
+.appointment-table td {
+    padding: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 0.9rem;
+    cursor: default;
+}
+  
+.appointment-table td img {
+    width: 35px;
+    cursor: pointer;
+}
+
+#appointment-action svg {
+    width: 25px;
+    height: 25px;
+    stroke: #1b1b1f;
+    transition: all 0.3s ease;
+}
+
+#appointment-action > svg:nth-child(1) {
+    stroke: #1dc925;
+}
+
+#appointment-action > svg:nth-child(2) {
+    stroke: #c51616;
+    fill: #c51616;
+}
+
+#appointment-action svg:hover {
+    cursor: pointer;
+}

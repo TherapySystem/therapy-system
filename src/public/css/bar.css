@@ -1,0 +1,79 @@
+.header-section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: auto;
+    padding-inline: 20px;
+    background-color: #f1fcf1;
+    margin: 0px;
+    border-bottom: 3px solid #6fbd3c;
+    color: rgb(48, 48, 48);
+}
+
+.header-section img {
+    width: 70px;
+    height: 70px;
+    margin: 5px;
+}
+
+.header-text-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    min-width: max-content;
+}
+
+.brand-section {
+    display: flex;
+    flex-direction: row;
+}
+
+.brand {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.address {
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+.call-number-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+    width: auto;
+}
+
+.call-number-section svg {
+    width: 24px;
+    padding-inline: 10px;
+}
+
+.menu-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.menu-section > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    width: 80px;
+    transition: all 0.3s ease;
+}
+
+.menu-section > div:hover {
+    box-shadow: inset 0 -3px 0 0 #6fbd3c;
+}
+
+.active-menu-item {
+    box-shadow: inset 0 -3px 0 0 #4b8127;
+}

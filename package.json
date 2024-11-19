@@ -1,0 +1,21 @@
+{
+  "name": "therapy-system",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "watch": "nodemon src/server.js",
+    "browser-sync": "browser-sync start --proxy http://localhost:3000 --files 'src/public/**/*.*', 'src/views/*.html', 'src/public/**/**/*.*'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.3",
+    "concurrently": "^9.0.1",
+    "nodemon": "^3.1.7"
+  }
+}

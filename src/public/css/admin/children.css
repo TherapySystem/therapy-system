@@ -1,0 +1,48 @@
+.content-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.table-section {
+    flex-grow: 1;
+    margin-inline: 25px;
+}
+
+.children-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.children-table tbody tr {
+    border-top: 0.5px solid #AEBAC3;
+    transition: box-shadow 0.1s ease;
+}
+
+.children-table tbody tr:hover {
+    box-shadow: inset 5px 0 0 0 #35a564, inset -5px 0 0 0 #35a564;
+}
+  
+.children-table th {
+    text-align: left;
+    font-weight: lighter;
+    padding-inline: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #20794c;
+}
+
+.children-table td {
+    padding: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 0.9rem;
+    cursor: default;
+}
+  
+.children-table td img {
+    width: 35px;
+    cursor: pointer;
+}
