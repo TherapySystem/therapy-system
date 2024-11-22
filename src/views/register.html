@@ -47,76 +47,82 @@
     </div>
 
     <div class="main-container">
-        <h3>Registration Form</h3>
-        <div class="patient-details">
-            <div>Patient / Child Information</div>
-            <div class="patient-fields">
-                <div class="input-container">
-                    <input type="text" id="firstNameChild" placeholder=" ">
-                    <label for="firstNameChild">First Name</label>
-                </div>
-                <div class="input-container">
-                    <input type="text" id="lastNameChild" placeholder=" ">
-                    <label for="lastNameChild">Last Name</label>
-                </div>
-                <div class="input-container">
-                    <input type="text" id="middleNameChild" placeholder=" ">
-                    <label for="middleNameChild">Middle Name</label>
-                </div>
-                <div class="input-container">
-                    <input type="date" id="birthDateChild" placeholder=" ">
-                    <label for="birthDateChild">Date of Birth</label>
-                </div>
-            </div>
-        </div>
-        <div class="parent-details">
-            <div>Patient / Child Information</div>
-            <div class="parent-account-fields">
-                <div class="input-container">
-                    <input type="text" id="username" placeholder=" ">
-                    <label for="username">Username</label>
-                </div>
-                <div class="input-container">
-                    <input type="password" id="password" placeholder=" ">
-                    <label for="password">Password</label>
-                </div>
-            </div>
-            <div class="parent-fields">
-                <div class="input-container">
-                    <input type="text" id="firstName" placeholder=" ">
-                    <label for="firstName">First Name</label>
-                </div>
-                <div class="input-container">
-                    <input type="text" id="lastName" placeholder=" ">
-                    <label for="lastName">Last Name</label>
-                </div>
-                <div class="input-container">
-                    <input type="text" id="middleName" placeholder=" ">
-                    <label for="middleName">Middle Name</label>
-                </div>
-            </div>
-            <div class="parent-fields">
-                <div class="input-container">
-                    <input type="date" id="birthDate" placeholder=" ">
-                    <label for="birthDate">Date of Birth</label>
-                </div>
-                <div class="input-container">
-                    <input type="text" id="email" placeholder=" ">
-                    <label for="email">Email</label>
-                </div>
-                <div class="input-container">
-                    <input type="text" id="mobileNumber" placeholder=" ">
-                    <label for="mobileNumber">Mobile Number</label>
-                </div>
-            </div>
-            <div class="input-container">
-                <input type="text" id="address" placeholder=" ">
-                <label for="address">Address</label>
-            </div>
-        </div>
 
-        <p class="registration-note">Note: After this registration you and your child are assigned for appointment for preliminary assesment and validation of your account. Wait for our call notice. </p>
-        <button class="submit-registration" type="submit">Submit</button>
+        <form action="/register-new-patient" method="post">
+
+            <h3>Registration Form</h3>
+            <div class="patient-details">
+                <div>Patient / Child Information</div>
+                <div class="patient-fields">
+                    <div class="input-container">
+                        <input type="text" id="firstNameChild" name="childFirstName" placeholder=" ">
+                        <label for="firstNameChild">First Name</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="lastNameChild" name="childLastName" placeholder=" ">
+                        <label for="lastNameChild">Last Name</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="middleNameChild" name="childMiddleName" placeholder=" ">
+                        <label for="middleNameChild">Middle Name</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="date" id="birthDateChild" name="childBirthDate" placeholder=" ">
+                        <label for="birthDateChild">Date of Birth</label>
+                    </div>
+                </div>
+            </div>
+            <div class="parent-details">
+                <div>Parent / Guardian Information</div>
+                <div class="parent-account-fields">
+                    <div class="input-container">
+                        <input type="text" id="username" name="parentUsername" placeholder=" ">
+                        <label for="username">Username</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="password" id="password" name="parentPassword" placeholder=" ">
+                        <label for="password">Password</label>
+                    </div>
+                </div>
+                <div class="parent-fields">
+                    <div class="input-container">
+                        <input type="text" id="firstName" name="parentFirstName" placeholder=" ">
+                        <label for="firstName">First Name</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="lastName" name="parentLastName" placeholder=" ">
+                        <label for="lastName">Last Name</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="middleName" name="parentMiddleName" placeholder=" ">
+                        <label for="middleName">Middle Name</label>
+                    </div>
+                </div>
+                <div class="parent-fields">
+                    <div class="input-container">
+                        <input type="date" id="birthDate" name="parentBirthDate" placeholder=" ">
+                        <label for="birthDate">Date of Birth</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="email" name="parentEmail" placeholder=" ">
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="mobileNumber" name="parentNumber" placeholder=" ">
+                        <label for="mobileNumber">Mobile Number</label>
+                    </div>
+                </div>
+                <div class="input-container">
+                    <input type="text" id="address" name="address" placeholder=" ">
+                    <label for="address">Address</label>
+                </div>
+            </div>
+
+            <p class="registration-note">Note: After this registration you and your child are assigned for appointment for preliminary assesment and validation of your account. Wait for our call notice. </p>
+            <button class="submit-registration" type="submit">Submit</button>
+
+        </form>
+        
     </div>
 
     <script src="/js/general.js"></script>
