@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/bubble_notification.css">
     <link rel="stylesheet" href="/css/admin/general.css">
     <link rel="stylesheet" href="/css/admin/sidebar.css">
     <link rel="stylesheet" href="/css/admin/users.css">
@@ -58,7 +59,7 @@
         </div>
         <div class="content-section">
             <div class="headbar">
-                <input type="text" placeholder="Search" class="search-input">
+                <input id="search-input" type="text" placeholder="Search" class="search-input">
                 <button class="search-button">Search</button>
                 <div class="action">
                     <svg id="add-user" width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -67,7 +68,7 @@
                 </div>
             </div>
             <div class="table-section">
-                <table class="users-table">
+                <table id="users-table" class="users-table">
                     <thead>
                         <tr>
                             <th>ID No.</th>
@@ -95,6 +96,8 @@
             </div>
         </div>
     </div>
+    <script src="/js/bubble_notification.js"></script>
+    <script src="/js/admin/users.js"></script>
     <script src="/js/admin/admin-sidebar.js"></script>
 </body>
 </html>
