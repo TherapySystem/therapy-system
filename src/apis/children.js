@@ -14,7 +14,7 @@ const addChild = async (childInfo) => {
     
 }
 
-const getAllChildren = async (keyword) => {
+const getAllChildren = async (keyword = '') => {
     const children = await db.ref(childrenNode).once('value', (snapshot) => {
         return snapshot.val();
     });
