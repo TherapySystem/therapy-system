@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "watch": "nodemon src/server.js",
+    "start": "node src/server.js",
     "browser-sync": "browser-sync start --proxy http://localhost:3000 --files 'src/public/**/*.*', 'src/views/*.html', 'src/public/**/**/*.*'"
   },
   "keywords": [],
