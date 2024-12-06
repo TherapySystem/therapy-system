@@ -22,7 +22,7 @@ document.getElementById('secretary-logout').onclick = async () => {
     });
 
     const result = await response.json();
-
+    
     if (result) {
         const { status } = result;
         if (status == 'success') {

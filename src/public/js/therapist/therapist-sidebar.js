@@ -1,11 +1,17 @@
 document.getElementById('therapist-sessions').onclick = () => {
     window.location.href = '/therapist/sessions';
 }
+document.getElementById('therapist-appointments').onclick = () => {
+    window.location.href = '/therapist/appointments';
+}
 document.getElementById('therapist-patients').onclick = () => {
     window.location.href = '/therapist/patients';
 }
 document.getElementById('therapist-activities').onclick = () => {
     window.location.href = '/therapist/activities';
+}
+document.getElementById('therapist-chats').onclick = () => {
+    window.location.href = '/therapist/chats';
 }
 
 document.getElementById('therapist-logout').onclick = async () => {

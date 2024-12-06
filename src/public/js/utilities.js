@@ -6,6 +6,19 @@ const generateDiv = () => {
     }
 }
 
+const generateLoadingDialog = (message) => {
+    const existingDialog = document.getElementById('loadingDialog');
+    if (!existingDialog) {
+        const div = `
+        <div id="loadingDialog">
+            <div class="content">
+            <img class="loading-icon" src="/svg/loading.svg"><p>${message}</p>
+            </div>
+        </div>`;
+        document.body.insertAdjacentHTML('beforeend', div);
+    }
+}
+
 const showErrorNotification = (message, duration = 3000) => {
     generateDiv();
     const bubble = document.getElementById('notification-bubble');
@@ -27,4 +40,15 @@ const showSuccessNotification = (message, duration = 3000) => {
     setTimeout(() => {
         bubble.style.display = 'none';
     }, duration);
+}
+
+const showLoadingScreen = (message) => {
+    generateLoadingDialog(message);
+    const loadingDialog = document.getElementById('loadingDialog');
+    loadingDialog.style.display = 'flex';
+}
+
+const hideLoadingScreen = () => {
+    const loadingDialog = document.getElementById('loadingDialog');
+    loadingDialog.style.display = 'none';
 }

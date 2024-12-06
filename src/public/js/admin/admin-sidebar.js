@@ -19,9 +19,13 @@ document.getElementById('admin-menu-children').onclick = () => {
 document.getElementById('admin-menu-users').onclick = () => {
     window.location.href = '/admin/users';
 }
+document.getElementById('admin-menu-payroll').onclick = () => {
+    window.location.href = '/admin/payroll';
+}
 document.getElementById('admin-menu-reports').onclick = () => {
     window.location.href = '/admin/reports';
 }
+
 document.getElementById('admin-menu-logout').onclick = async () => {
     const response = await fetch('/logout', {
         method: 'POST',

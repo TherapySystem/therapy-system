@@ -14,9 +14,11 @@ const verifyToken = (requiredRole) => {
                 res.clearCookie('token');
                 return res.redirect('/login');
             }
-            if (decoded.role != requiredRole) {
-                return res.redirect('/unauthorized');
-            }
+            if (requiredRole) {
+                if (decoded.role != requiredRole) {
+                    return res.redirect('/unauthorized');
+                }
+            } 
             req.user = decoded;
             next();
         });

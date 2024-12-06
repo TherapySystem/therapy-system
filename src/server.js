@@ -1,4 +1,10 @@
+// CREDENTIALS
+// TherapySystem123@gmail.com
+// TherapySystem12345
+
 const express = require('express');
+const { Server } = require('socket.io');
+const http = require('http');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -6,15 +12,19 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
 const db = require('./fb_config/fb_config');
 const enrollApi = require('./apis/enroll');
 const accountsApi = require('./apis/accounts');
-// const childrenApi = require('./apis/children');
-// const appointmentsApi = require('./apis/appointments');
-// const sessionsApi = require('./apis/sessions');
+const childrenApi = require('./apis/children');
+const sessionsApi = require('./apis/sessions');
+const appointmentsApi = require('./apis/appointments');
+const billingApi = require('./apis/billings');
 // const reportsApi = require('./apis/reports');
 // const vacanciesApi = require('./apis/vacancies');
+const chatsApi = require('./apis/chats');
 
 const { verifyToken, noToken } = require('./middleware/jwt_verifier');
 
@@ -36,6 +46,27 @@ app.use((req, res, next) => {
 
 app.use(express.static(publicPath));
 
+io.on('connection', async (socket) => {
+    socket.on('joinRoom', async ({ therapistId, childId }) => {
+        const chatRoom = `${ therapistId }_${ childId }`;
+        socket.join(chatRoom);
+        const chats = await chatsApi.getChats(chatRoom);
+        socket.emit('loadMessages', chats);
+    })
+
+    socket.on('sendMessage', async ({ therapistId, childId, message, senderId }) => {
+        const chatRoom = `${ therapistId }_${ childId }`;
+        const messageData = {
+            chatRoomId: chatRoom,
+            message,
+            timeStamp: getFormattedDateTime(),
+            senderId
+        };
+
+        await chatsApi.addChat(messageData);
+        io.to(chatRoom).emit('receiveMessage', messageData);
+    })
+})
 
 app.get('/', async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/home.html'));
@@ -62,7 +93,14 @@ app.get('/unauthorized', async (req, res) => {
 })
 
 // ADMIN
-app.get('/admin', verifyToken('admin'), async (req, res) => {
+app.get('/admin', verifyToken(''), async (req, res) => {
+    if (req.user.role == 'secretary') {
+        return res.redirect('/secretary');
+    } else if (req.user.role == 'therapist') {
+        return res.redirect('/therapist');
+    } else if (req.user.role == 'cashier') {
+        return res.redirect('/cashier');
+    }
     res.sendFile(path.join(publicPath, '../views/admin/home.html'));
 })
 
@@ -74,21 +112,30 @@ app.get('/admin/users', verifyToken('admin'), async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/admin/users.html'));
 })
 
+app.get('/admin/payroll', verifyToken('admin'), async (req, res) => {
+    res.sendFile(path.join(publicPath, '../views/admin/payroll.html'));
+})
+
 app.get('/admin/reports', verifyToken('admin'), async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/admin/reports.html'));
 })
 
-// SECRETARY
-app.get('/secretary', verifyToken('secretary'), async (req, res) => {
-    res.redirect('/secretary/children');
+// CASHIER
+app.get('/cashier', verifyToken('cashier'), async (req, res) => {
+    res.sendFile(path.join(publicPath, '../views/cashier/home.html'));
 })
 
-app.get('/secretary/children', verifyToken('secretary'), async (req, res) => {
-    res.sendFile(path.join(publicPath, '../views/secretary/children.html'));
+// SECRETARY
+app.get('/secretary', verifyToken('secretary'), async (req, res) => {
+    res.redirect('/secretary/enrollees');
 })
 
 app.get('/secretary/enrollees', verifyToken('secretary'), async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/secretary/enrollees.html'));
+})
+
+app.get('/secretary/children', verifyToken('secretary'), async (req, res) => {
+    res.sendFile(path.join(publicPath, '../views/secretary/children.html'));
 })
 
 app.get('/secretary/appointments', verifyToken('secretary'), async (req, res) => {
@@ -108,8 +155,17 @@ app.get('/therapist/sessions', verifyToken('therapist'), async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/therapist/sessions.html'));
 });
 
+app.get('/therapist/appointments', verifyToken('therapist'), async (req, res) => {
+    res.sendFile(path.join(publicPath, '../views/therapist/appointments.html'));
+});
+
 app.get('/therapist/patients', verifyToken('therapist'), async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/therapist/patients.html'));
+});
+
+
+app.get('/therapist/chats', verifyToken('therapist'), async (req, res) => {
+    res.sendFile(path.join(publicPath, '../views/therapist/chats.html'));
 });
 
 app.get('/therapist/activities', verifyToken('therapist'), async (req, res) => {
@@ -217,6 +273,338 @@ app.put('/get-all-users', async (req, res) => {
     res.send(users);
 });
 
+app.post('/add-user', async (req, res) => {
+    const { name, username, password, role } = req.body;
+    const response = await accountsApi.addUser(generateUniqueId('U'), name, username, password, role);
+
+    const returnResponse = {};
+
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'User added successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+});
+
+app.delete('/delete-user', async (req, res) => {
+    const { id } = req.body;
+    const response = await accountsApi.deleteUser(id);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'User deleted successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+    res.send(returnResponse);
+});
+
+app.post('/record-attendance', async (req, res) => {
+    const { employeeAttendance } = req.body;
+
+    const response = await accountsApi.recordAttendanceByBulk(employeeAttendance);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Attendance was recorded successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+    res.send(returnResponse);
+    
+});
+
+app.post('/initiate-payroll', async (req, res) => {
+    const { regular, special, fromDate, toDate } = req.body;
+
+    const response = await accountsApi.generatePayroll(regular, special, fromDate, toDate);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Payroll is successfully processed!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+});
+
+// Cashier
+app.put('/get-all-billings', async (req, res) => {
+    const { keyword } = req.body;
+    const allBillings = await billingApi.getAllBillings(keyword);
+    res.send(allBillings);
+});
+
+app.post('/save-billing', async (req, res) => {
+    const { childId, amount, paymentDate } = req.body;
+
+    const billingInfo = {
+        id: generateUniqueId('B'),
+        childId, 
+        amount, 
+        paymentDate
+    };
+
+    const response = await billingApi.saveBilling(billingInfo);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Billing added successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+});
+
+// Secretary
+app.put('/get-all-enrollees', async (req, res) => {
+    const { keyword } = req.body;
+    const allEnrollees = await enrollApi.getAllEnrollees(keyword);
+    res.send(allEnrollees);
+});
+
+app.put('/get-all-children', async (req, res) => {
+    const { keyword, therapistId } = req.body;
+
+    if (therapistId) {
+        const therapistChildren = await childrenApi.getChildrenByTherapist('', therapistId);
+        res.send(therapistChildren);
+        return;
+    }
+
+    const allChildren = await childrenApi.getAllChildren(keyword);
+    res.send(allChildren);
+});
+
+app.put('/get-all-therapist', async (req, res) => {
+    const{ keyword } = req.body;
+    const allTherapist = await accountsApi.getFilterAccountsByKeyword(keyword, 'therapist');
+    res.send(allTherapist);
+});
+
+app.put('/get-all-sessions', async (req, res) => {
+    const { keyword } = req.body;
+    const allSessions = await sessionsApi.getSessions(keyword);
+    res.send(allSessions);
+});
+
+app.put('/get-all-appointments', async (req, res) => {
+    const { keyword } = req.body;
+    const allAppointments = await appointmentsApi.getAppointments(keyword);
+    res.send(allAppointments);
+});
+
+app.post('/enrollee-accept', async (req, res) => {
+    const { id, service, therapistId } = req.body;
+    const response = await enrollApi.acceptEnrollee(id, service, therapistId);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Enrollee accepted successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+});
+
+app.post('/enrollee-reject', async (req, res) => {
+    const { id } = req.body;
+    const response = await enrollApi.rejectEnrollee(id);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Enrollee rejected successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+    
+    res.send(returnResponse);
+});
+
+app.delete('/child-delete', async (req, res) => {
+    const { id } = req.body;
+    const response = await childrenApi.removeChild(id);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Child deleted successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+})
+
+app.post('/save-session', async (req, res) => {
+    const { therapistId, childId, sessionDateTime } = req.body;
+    const sessionInfo = {
+        id: generateUniqueId('S'), 
+        therapistId, 
+        childId, 
+        sessionDateTime
+    }
+    const response = await sessionsApi.saveSession(sessionInfo);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Session saved successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+});
+
+app.post('/save-appointment', async (req, res) => {
+    const { therapistId, childId, appointmentDateTime } = req.body;
+    const appointmentInfo = {
+        id: generateUniqueId('A'), 
+        therapistId, 
+        childId, 
+        appointmentDateTime
+    }
+    const response = await appointmentsApi.saveAppointment(appointmentInfo);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Appointment saved successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+});
+
+app.post('/session-done', async (req, res) => {
+    const { id } = req.body;
+
+    const response = await sessionsApi.sessionDone(id);
+
+    const returnResponse = {};
+
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Session done successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+    
+    res.send(returnResponse);
+});
+
+app.post('/session-cancelled', async (req, res) => {
+    const { id } = req.body;
+
+    const response = await sessionsApi.sessionCancelled(id);
+
+    const returnResponse = {};
+
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Session done successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+    
+    res.send(returnResponse);
+});
+
+app.post('/appointment-done', async (req, res) => {
+    const { id } = req.body;
+
+    const response = await appointmentsApi.appointmentDone(id);
+
+    const returnResponse = {};
+
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Appointment done successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+    
+    res.send(returnResponse);
+});
+
+app.post('/appointment-cancelled', async (req, res) => {
+    const { id } = req.body;
+
+    const response = await appointmentsApi.appointmentCancelled(id);
+
+    const returnResponse = {};
+
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Appointment done successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+    
+    res.send(returnResponse);
+});
+
+// Therapist
+app.get('/get-my-id', verifyToken('therapist'), async (req, res) => {
+    const { id } = req.user;
+    res.send({ id });
+});
+
+app.put('/get-all-patients', verifyToken('therapist'), async (req, res) => {
+    const { keyword } = req.body;
+    const { id } = req.user;
+
+    const therapistChildren = await childrenApi.getChildrenByTherapist(keyword, id);
+
+    res.send(therapistChildren);
+});
+
+app.put('/get-all-sessions', verifyToken('therapist'), async (req, res) => {
+    const { keyword } = req.body;
+    const { id } = req.user;
+    
+    const therapistSessions = await sessionsApi.getSessionsByTherapist(keyword, id);
+    
+    res.send(therapistSessions);
+});
+
 function generateUniqueId(prefix) {
     const now = new Date();
     const uniqueId = `${prefix}${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}` +
@@ -225,6 +613,25 @@ function generateUniqueId(prefix) {
     return uniqueId;
 }
 
-app.listen(PORT, async () => {
+function getFormattedDateTime() {
+    const now = new Date();
+
+    const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", 
+                    "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+
+    const month = months[now.getMonth()];
+    const date = now.getDate();
+    const year = now.getFullYear();
+
+    let hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const period = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12 || 12; // Convert to 12-hour format, with 12 instead of 0 for midnight/noon
+
+    return `${month} ${date}, ${year} ${hours}:${minutes}${period}`;
+}
+
+server.listen(PORT, async () => {
     console.log(`Server starting at http://localhost:${ PORT }`);
 })

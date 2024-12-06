@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/general.css">
-    <link rel="stylesheet" href="/css/bubble_notification.css">
+    <link rel="stylesheet" href="/css/utilities.css">
     <link rel="stylesheet" href="/css/secretary/general.css">
     <link rel="stylesheet" href="/css/secretary/sidebar.css">
     <link rel="stylesheet" href="/css/secretary/enrollees.css">
@@ -69,8 +69,8 @@
         </div>
         <div class="content-section">
             <div class="headbar">
-                <input type="text" placeholder="Search" class="search-input">
-                <button class="search-button">Search</button>
+                <input id="search-input" type="text" placeholder="Search" class="search-input">
+                <button id="search-button" class="search-button">Search</button>
             </div>
             <div class="table-section">
                 <table class="enrollees-table">
@@ -80,32 +80,82 @@
                             <th>First name</th>
                             <th>Middle name</th>
                             <th>Parent/Guardian</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr id="enrollee#">
-                            <td id="enrollee-last-name">Doe</td>
-                            <td id="enrollee-first-name">John</td>
-                            <td id="enrollee-middle-name">Carlson</td>
-                            <td id="enrollee-guardian">Mother of Child</td>
-                            <td id="enrollee-action">
-                                <svg width="100%" height="100%" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                                    <line class="cls-1" x1="3" x2="12" y1="16" y2="25"/>
-                                    <line class="cls-1" x1="12" x2="29" y1="25" y2="7"/>
-                                </svg>
-                                <svg width="100%" height="100%" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-                                    <rect id="Icons" x="-256" y="-256" width="1280" height="800" style="fill:none;"/>
-                                    <path id="denied" d="M32.266,7.951c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-15.616,11.465c-2.759,3.433 -4.411,7.792 -4.411,12.535c0,11.053 8.974,20.027 20.027,20.027c4.743,0 9.102,-1.652 12.534,-4.411l-28.15,-28.151Zm31.048,25.295c2.87,-3.466 4.596,-7.913 4.596,-12.76c0,-11.054 -8.974,-20.028 -20.028,-20.028c-4.847,0 -9.294,1.726 -12.76,4.596l28.192,28.192Z"/>
-                                </svg>
-                            </td>
-                        </tr>
+                    <tbody id="tbody">
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <script src="/js/bubble_notification.js"></script>
+    
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Enrollee Information</h2>
+            <div class="modal-inner-content">
+                <div class="general-label-value">
+                    <h3>Child Name</h3>
+                    <p id="m-child-name">child name</p>
+                </div>
+                <div class="general-label-value">
+                    <h3>Child Birthdate</h3>
+                    <p id="m-child-birthdate">Child birthdate</p>
+                </div>
+                <div class="general-label-value">
+                    <h3>Address</h3>
+                    <p id="m-address">Address</p>
+                </div>
+                <div class="general-label-value">
+                    <h3>Parent Name</h3>
+                    <p id="m-parent-name">Parent name</p>
+                </div>
+                <div class="general-label-value">
+                    <h3>Parent Email</h3>
+                    <p id="m-parent-email">Parent email</p>
+                </div>
+                <div class="general-label-value">
+                    <h3>Parent Birthdate</h3>
+                    <p id="m-parent-birthdate">parent birthdate</p>
+                </div>
+                <div class="general-label-value">
+                    <h3>Parent Number</h3>
+                    <p id="m-parent-number">parent number</p>
+                </div>
+            </div>
+
+            <h3>Availed Service</h3>
+            
+            <div class="input-container">
+                <select id="service" name="service">
+                    <option value="" disabled selected hidden>Choose a service</option>
+                    <option value="Occupational Therapy">Occupational Therapy</option>
+                    <option value="Speech Therapy">Speech Therapy</option>
+                    <option value="Developmental Class">Developmental Class</option>
+                    <option value="Shadow Class">Shadow Class</option>
+                </select>
+                <label for="service">Service</label>
+            </div>
+
+            <h3>Assigned Therapist</h3>
+            
+            <div class="input-container">
+                <select id="therapists" name="therapists">
+                    <option value="" disabled selected hidden>Choose a Therapist</option>
+                    <option value="Occupational Therapy">Occupational Therapy</option>
+                    <option value="Speech Therapy">Speech Therapy</option>
+                    <option value="Developmental Class">Developmental Class</option>
+                    <option value="Shadow Class">Shadow Class</option>
+                </select>
+                <label for="therapists">Service</label>
+            </div>
+
+            <button id="accept-button" class="accept-button">Accept</button>
+            <button id="reject-button" class="reject-button">Reject</button>
+        </div>
+    </div>
+    <script src="/js/utilities.js"></script>
+    <script src="/js/secretary/enrollees.js"></script>
     <script src="/js/secretary/secretary-sidebar.js"></script>
 </body>
 </html>

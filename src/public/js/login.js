@@ -7,6 +7,8 @@ document.getElementById('submit-button').addEventListener('click', async () => {
         return
     }
 
+    showLoadingScreen('Checking credentials...');
+
     const response = await fetch('/login', {
         method: 'POST',
         headers: {
@@ -32,5 +34,7 @@ document.getElementById('submit-button').addEventListener('click', async () => {
     } else {
         showErrorNotification('Server is unreachable!');
     }
+
+    hideLoadingScreen();
 });
 

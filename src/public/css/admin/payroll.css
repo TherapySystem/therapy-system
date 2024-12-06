@@ -1,0 +1,301 @@
+.content-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.headbar {
+    display: flex;
+    flex-direction: row;
+    margin-inline: 25px;
+    margin-bottom: 10px;
+}
+
+.headbar .action {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+  
+.search-input {
+    width: 200px;
+    padding: 8px;
+    margin-right: 5px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 14px;
+}
+  
+.search-button {
+    padding: 8px 16px;
+    border: none;
+    background-color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #20794c;
+    border: 1px solid #20794c;
+    transition: all 0.3s ease;
+}
+  
+.search-button:hover {
+    background-color: #20794c;
+    color: #fff;
+}
+
+#initiatePayroll {
+    background-color: #12a80d;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #095f06;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+#initiatePayroll:hover {
+    background-color: #095f06;
+}
+
+#attendance {
+    background-color: #397de4;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #2863bb;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    margin-right: 10px;
+}
+
+#attendance:hover {
+    background-color: #2863bb;
+}
+
+.table-section {
+    flex-grow: 1;
+    margin-inline: 25px;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-table tbody tr {
+    border-top: 0.5px solid #AEBAC3;
+    transition: box-shadow 0.1s ease;
+}
+
+.users-table tbody tr:hover {
+    box-shadow: inset 5px 0 0 0 #35a564, inset -5px 0 0 0 #35a564;
+}
+  
+.users-table th {
+    text-align: left;
+    font-weight: lighter;
+    padding-inline: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #20794c;
+}
+
+.users-table td {
+    padding: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 0.9rem;
+    cursor: default;
+}
+  
+.users-table td img {
+    width: 35px;
+    cursor: pointer;
+}
+
+#users-action svg {
+    width: 25px;
+    height: 25px;
+    stroke: #1b1b1f;
+    transition: all 0.3s ease;
+}
+
+#users-action > svg:nth-child(1):hover {
+    stroke: #d38c22;
+}
+
+#users-action > svg:nth-child(2):hover {
+    stroke: #b83838;
+}
+
+#users-action svg:hover {
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 10px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+.closeAttendance {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.closeAttendance:hover,
+.closeAttendance:focus {
+    color: black;
+    text-decoration: none;
+}
+
+.input-container {
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+}
+  
+.input-container input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #575757;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+  
+.input-container label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #575757;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.3s ease all;
+}
+  
+
+.input-container label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #575757;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.3s ease all;
+    background-color: #fff;
+    padding: 0 5px;
+}
+.input-container input:focus {
+    border-color: #4b8127;
+}
+  
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label {
+    top: 0;
+    font-size: 13px;
+    color: #4b8127;
+    background-color: #fff;
+    padding: 5px;
+}
+  
+.input-container input:focus {
+    outline: none;
+}
+
+.input-container select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #575757;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: #fff;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+.input-container select:focus {
+    border-color: #4b8127;
+    outline: none;
+}
+
+.input-container select:focus + label,
+.input-container select:not([value=""]) + label {
+    top: 0;
+    font-size: 13px;
+    color: #4b8127;
+}
+
+.submit-button {
+    margin-top: 20px;
+    background-color: #fff;
+    width: 120px;
+    padding: 10px;
+    border-radius: 24px;
+    font-weight: bold;
+    border: 1px solid #4b8127;
+    color: #4b8127;
+    cursor: pointer;
+    transition:all 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #4b8127;
+    color: #f8f8f8;
+}
+
+.employee-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 10px;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.employee-item {
+    border-bottom: 1px solid #ebebeb;
+    padding: 5px;
+}

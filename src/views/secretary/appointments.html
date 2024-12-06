@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/general.css">
-    <link rel="stylesheet" href="/css/bubble_notification.css">
+    <link rel="stylesheet" href="/css/utilities.css">
     <link rel="stylesheet" href="/css/secretary/general.css">
     <link rel="stylesheet" href="/css/secretary/sidebar.css">
     <link rel="stylesheet" href="/css/secretary/appointments.css">
@@ -69,10 +69,10 @@
         </div>
         <div class="content-section">
             <div class="headbar">
-                <input type="text" placeholder="Search" class="search-input">
-                <button class="search-button">Search</button>
+                <input id="search-input" type="text" placeholder="Search" class="search-input">
+                <button id="search-button" class="search-button">Search</button>
                 <div class="action">
-                    <svg width="100%" height="100%" viewBox="0 0 24 24" id="new-appointment" data-name="24x24/On Light/Schedule-Add" xmlns="http://www.w3.org/2000/svg">
+                    <svg id="new-appointment" width="100%" height="100%" viewBox="0 0 24 24" id="new-appointment" data-name="24x24/On Light/Schedule-Add" xmlns="http://www.w3.org/2000/svg">
                         <rect id="view-box" width="24" height="24" fill="none"/>
                         <path id="Shape" d="M2.75,17.5A2.753,2.753,0,0,1,0,14.75v-10A2.754,2.754,0,0,1,2.5,2.012V.75A.75.75,0,0,1,4,.75V2h9.5V.75a.75.75,0,0,1,1.5,0V2.012A2.753,2.753,0,0,1,17.5,4.75v10a2.752,2.752,0,0,1-2.75,2.75ZM1.5,4.75v10A1.251,1.251,0,0,0,2.75,16h12A1.251,1.251,0,0,0,16,14.75v-10A1.251,1.251,0,0,0,14.75,3.5h-12A1.251,1.251,0,0,0,1.5,4.75Zm6.5,8V10.5H5.75a.75.75,0,0,1,0-1.5H8V6.75a.75.75,0,0,1,1.5,0V9h2.25a.75.75,0,0,1,0,1.5H9.5v2.25a.75.75,0,0,1-1.5,0Z" transform="translate(3.25 3.25)" fill="#fff"/>
                     </svg>
@@ -89,29 +89,46 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr id="appointment#">
-                            <td id="appointment-date">January 01, 2000</td>
-                            <td id="appointment-time">10:00 AM</td>
-                            <td id="appointment-therapist">Therapist Name</td>
-                            <td id="appointment-child">Child name</td>
-                            <td id="appointment-action">
-                                <svg width="100%" height="100%" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                                    <line class="cls-1" x1="3" x2="12" y1="16" y2="25"/>
-                                    <line class="cls-1" x1="12" x2="29" y1="25" y2="7"/>
-                                </svg>
-                                <svg width="100%" height="100%" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-                                    <rect id="Icons" x="-256" y="-256" width="1280" height="800" style="fill:none;"/>
-                                    <path id="denied" d="M32.266,7.951c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-15.616,11.465c-2.759,3.433 -4.411,7.792 -4.411,12.535c0,11.053 8.974,20.027 20.027,20.027c4.743,0 9.102,-1.652 12.534,-4.411l-28.15,-28.151Zm31.048,25.295c2.87,-3.466 4.596,-7.913 4.596,-12.76c0,-11.054 -8.974,-20.028 -20.028,-20.028c-4.847,0 -9.294,1.726 -12.76,4.596l28.192,28.192Z"/>
-                                </svg>
-                            </td>
-                        </tr>
+                    <tbody id="tbody">
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <script src="/js/bubble_notification.js"></script>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Therapist</h3>
+            <div class="input-container">
+                <select id="therapist" name="therapist">
+                    <option value="" disabled selected hidden>Choose a Therapist</option>
+                    <!-- <option value="Occupational Therapy">Occupational Therapy</option> -->
+                </select>
+                <label for="therapist">Therapist</label>
+            </div>
+
+            <h3>Child</h3>
+            <div class="input-container">
+                <select id="child" name="child">
+                    <option value="" disabled selected hidden>Choose a Therapist first</option>
+                    <!-- <option value="Occupational Therapy">Occupational Therapy</option> -->
+                </select>
+                <label for="child">Child</label>
+            </div>
+            
+            <h3>Date and time</h3>
+            <div class="input-container">
+                <input type="datetime-local" id="appointmentDateTime" name="appointmentDateTime" placeholder=" ">
+                <label for="appointmentDateTime">Time & Date of Appointment</label>
+            </div>
+
+            <button id="confirm-button">Confirm</button>
+        </div>
+    </div>
+
+    <script src="/js/utilities.js"></script>
+    <script src="/js/secretary/appointments.js"></script>
     <script src="/js/secretary/secretary-sidebar.js"></script>
 </body>
 </html>

@@ -12,6 +12,16 @@ const snapshotParserWithIds = (snapshotData) => {
     return parsedData;
 }
 
+const snapshotParseObject = (snapshotData) => {
+    const parsedData = {
+        id: snapshotData.key,
+        ...snapshotData.val()
+    };
+    
+    return parsedData;
+}
+
 module.exports = {
-    snapshotParserWithIds
+    snapshotParserWithIds,
+    snapshotParseObject
 }

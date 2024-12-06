@@ -1,10 +1,10 @@
 const admin = require('firebase-admin');
 
-const serviceAccount = require('../../therapysystem-4c459-firebase-adminsdk-gg8hm-66ef117a1f.json');
+const serviceAccount = require('../../therapysystem-da6bd-firebase-adminsdk-pxhgg-47af7b9f27.json');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://therapysystem-4c459-default-rtdb.asia-southeast1.firebasedatabase.app'
+    databaseURL: 'https://therapysystem-da6bd-default-rtdb.asia-southeast1.firebasedatabase.app'
 });
 
 const database = admin.database();

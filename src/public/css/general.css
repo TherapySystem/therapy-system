@@ -12,3 +12,19 @@ html, body {
 body {
     background-color: #fff;
 }
+
+.general-label-value {
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+        margin: 0;
+        margin-bottom: 2px;
+        padding: 0;
+    }
+
+    p {
+        margin: 0;
+        padding: 0;
+    }
+}
