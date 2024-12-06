@@ -209,17 +209,25 @@ app.post('/register-new-patient', async (req, res) => {
     };
 
     console.log('Enrollee Information: ', enrolleeInformation);
+    const response = await enrollApi.addEnrollee(enrolleeInformation);
 
-    if (await enrollApi.addEnrollee(enrolleeInformation)) {
-        console.log('Result: success');
-        res.redirect('/register')
+    var customResponse = {};
+
+    if (response) {
+        customResponse = {
+            status: 'success',
+            message: 'Patient registered successfully!'
+        }
     } else {
-        console.log('Result: failed');
-        res.send({
+        customResponse = {
             status: 'error',
             message: 'Something went wrong, try again later'
-        });
+        }
     }
+
+    console.log(customResponse);
+
+    res.send(customResponse);
 });
 
 app.post('/logout', async (req, res) => {

@@ -1,16 +1,16 @@
-.main-container > form {
+.main-container {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-.main-container > form > h3 {
+.main-container > h3 {
     text-align: center;
     width: 100%;
 }
 
-.main-container > form > div {
+.main-container > div {
     padding: 20px;
 }
 
