@@ -172,6 +172,24 @@ app.get('/therapist/activities', verifyToken('therapist'), async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/therapist/activities.html'));
 });
 
+// Application
+app.post('/child-login', async (req, res) => {
+    const { username, password } = req.body;
+    const child = await childrenApi.checkChildCredentials(username, password);
+
+    if (child) {
+        res.send(child.id);
+    } else {
+        const enrollee = await enrollApi.checkChildCredentials(username, password);
+        if (enrollee) {
+            res.send('Pending');
+        } else {
+            res.send('Not found');
+        }
+    }
+
+});
+
 // Home
 app.post('/register-new-patient', async (req, res) => {
     console.log('Registering new patient...');

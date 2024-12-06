@@ -63,10 +63,21 @@ const rejectEnrollee = async (id) => {
     }
 };
 
+const checkChildCredentials = async (username, password) => {
+    const enrollees = await getAllEnrollees();
+    const enrollee = enrollees.find((enrollee) => {
+        return enrollee.parentUsername.toLowerCase() === username.toLowerCase() && enrollee.parentPassword === password;
+    });
+
+    return enrollee;
+}
+
 
 module.exports = {
     addEnrollee,
     getAllEnrollees,
     acceptEnrollee,
-    rejectEnrollee
+    rejectEnrollee,
+
+    checkChildCredentials
 }

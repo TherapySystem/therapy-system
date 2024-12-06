@@ -58,10 +58,21 @@ const removeChild = async (id) => {
     }
 }
 
+const checkChildCredentials = async (username, password) => {
+    const children = await getAllChildren();
+    const child = children.find(child => {
+        return child.parentUsername.toLowerCase() === username.toLowerCase() && child.parentPassword === password;
+    });
+    
+    return child;
+}
+
 module.exports = {
     addChild,
     getAllChildren,
     getChildrenByTherapist,
     getChildById,
-    removeChild
+    removeChild,
+
+    checkChildCredentials
 }
