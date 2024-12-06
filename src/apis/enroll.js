@@ -14,7 +14,7 @@ const addEnrollee = async (enrolleeInformation) => {
     }
 };
 
-const getAllEnrollees = async (keyword) => {
+const getAllEnrollees = async (keyword = '') => {
     const enrollees = await db.ref(enrollNode).once('value', (snapshot) => {
         return snapshot.val();
     });
