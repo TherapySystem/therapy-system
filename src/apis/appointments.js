@@ -71,10 +71,16 @@ const getAppointmentsByTherapist = async (keyword, id) => {
     return appointments.filter(appointment => appointment.therapistId === id);
 }
 
+const getAppointmentsByChild = async (id) => {
+    const appointments = await getAppointments('');
+    return appointments.filter(appointment => appointment.childId == id); 
+}
+
 module.exports = {
     saveAppointment,
     getAppointments,
     getAppointmentsByTherapist,
+    getAppointmentsByChild,
     appointmentDone,
     appointmentCancelled
 }

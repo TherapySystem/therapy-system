@@ -196,6 +196,12 @@ app.put('/get-child-sessions', async (req, res) => {
     res.send(childSessions);
 });
 
+app.put('/get-child-appointments', async (req, res) => {
+    const { childId } = req.body;
+    const childAppointments = await appointmentsApi.getAppointmentsByChild(childId);
+    res.send(childAppointments);
+});
+
 // Home
 app.post('/register-new-patient', async (req, res) => {
     console.log('Registering new patient...');
