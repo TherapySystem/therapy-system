@@ -190,6 +190,12 @@ app.post('/child-login', async (req, res) => {
 
 });
 
+app.put('/get-child-sessions', async (req, res) => {
+    const { childId } = req.body;
+    const childSessions = await sessionsApi.getSessionsByChild(childId);
+    res.send(childSessions);
+});
+
 // Home
 app.post('/register-new-patient', async (req, res) => {
     console.log('Registering new patient...');

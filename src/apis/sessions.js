@@ -71,10 +71,16 @@ const getSessionsByTherapist = async (keyword, id) => {
     return sessions.filter(session => session.therapistId === id);
 }
 
+const getSessionsByChild = async (id) => {
+    const sessions = await getSessions('');
+    return sessions.filter(session => session.childId == id); 
+}
+
 module.exports = {
     saveSession,
     getSessions,
     getSessionsByTherapist,
+    getSessionsByChild,
     sessionDone,
     sessionCancelled
 }
