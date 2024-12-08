@@ -202,6 +202,12 @@ app.put('/get-child-appointments', async (req, res) => {
     res.send(childAppointments);
 });
 
+app.put('/get-child-by-id', async (req, res) => {
+    const { childId } = req.body;
+    const childInfo = await childrenApi.getChildById(childId);
+    res.send(childInfo);
+});
+
 // Home
 app.post('/register-new-patient', async (req, res) => {
     console.log('Registering new patient...');
