@@ -205,7 +205,9 @@ app.put('/get-child-appointments', async (req, res) => {
 app.put('/get-child-by-id', async (req, res) => {
     const { childId } = req.body;
     const childInfo = await childrenApi.getChildById(childId);
+    console.log(childInfo);
     const therapistInfo = await accountsApi.getAccountById(childInfo.therapistId);
+    console.log(therapistInfo);
     childInfo.therapistName = therapistInfo.name;
     res.send(childInfo);
 });
