@@ -22,6 +22,7 @@ const childrenApi = require('./apis/children');
 const sessionsApi = require('./apis/sessions');
 const appointmentsApi = require('./apis/appointments');
 const billingApi = require('./apis/billings');
+const snapshotParser = require('./apis/snapshotParser');
 // const reportsApi = require('./apis/reports');
 // const vacanciesApi = require('./apis/vacancies');
 const chatsApi = require('./apis/chats');
@@ -204,10 +205,8 @@ app.put('/get-child-appointments', async (req, res) => {
 
 app.put('/get-child-by-id', async (req, res) => {
     const { childId } = req.body;
-    const childInfo = await childrenApi.getChildById(childId);
-    console.log(childInfo);
-    const therapistInfo = await accountsApi.getAccountById(childInfo.therapistId);
-    console.log(therapistInfo);
+    const childInfo = snapshotParser.snapshotParseObject(await childrenApi.getChildById(childId));
+    const therapistInfo = snapshotParser.snapshotParseObject(await accountsApi.getAccountById(childInfo.therapistId));
     childInfo.therapistName = therapistInfo.name;
     res.send(childInfo);
 });
