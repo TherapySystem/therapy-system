@@ -40,7 +40,7 @@ const getAllBillings = async (keyword = '') => {
 const getAllBillingAmount = async () => {
     const billings = await getAllBillings();
     const totalAmount = billings.reduce((total, billing) => {
-        return total + billing.amount;
+        return Number(total) + Number(billing.amount);
     }, 0);
     
     return totalAmount;
