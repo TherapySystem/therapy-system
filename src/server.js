@@ -22,6 +22,8 @@ const childrenApi = require('./apis/children');
 const sessionsApi = require('./apis/sessions');
 const appointmentsApi = require('./apis/appointments');
 const billingApi = require('./apis/billings');
+const servicesApi = require('./apis/services');
+const activitiesApi = require('./apis/activities');
 const snapshotParser = require('./apis/snapshotParser');
 // const reportsApi = require('./apis/reports');
 // const vacanciesApi = require('./apis/vacancies');
@@ -650,6 +652,38 @@ app.put('/get-all-sessions', verifyToken('therapist'), async (req, res) => {
     const therapistSessions = await sessionsApi.getSessionsByTherapist(keyword, id);
     
     res.send(therapistSessions);
+});
+
+app.put('/get-service-variables', async (req, res) => {
+    const { service } = req.body;
+    const variables = servicesApi.getServiceVariables(service);
+    
+    res.send(variables);
+});
+
+app.post('/save-activity', async (req, res) => {
+    const { activity } = req.body;
+    
+    const response = await activitiesApi.addActivity(activity);
+    // await activitiesApi.processNewActivityGrade(activity);
+
+    const customResponse = {};
+
+    if (response) {
+        customResponse.status = 'success';
+        customResponse.message = 'Activity saved successfully!';
+    } else {
+        customResponse.status = 'error';
+        customResponse.message = 'Something went wrong, try again later';
+    }
+    
+    res.send(customResponse);
+});
+
+app.put('/get-suggested-activities', async (req, res) => {
+    const { childId } = req.body;
+    const response = await activitiesApi.getChildSuggestedActivities(childId);
+    res.send(response);
 });
 
 function generateUniqueId(prefix) {

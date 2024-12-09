@@ -67,12 +67,31 @@ const checkChildCredentials = async (username, password) => {
     return child;
 }
 
+const newChildActivity = async (childId, date, variables) => {
+    try {
+        await db.ref(childrenNode).child(childId).child('activities').child(date).set(variables);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+const getChildActivities = async (childId) => {
+    const activities = await db.ref(childrenNode).child(childId).child('activities').once('value', (snapshot) => {
+        return snapshot.val();
+    });
+
+    return activities;
+}
+
 module.exports = {
     addChild,
     getAllChildren,
     getChildrenByTherapist,
     getChildById,
     removeChild,
+    newChildActivity,
+    getChildActivities,
 
     checkChildCredentials
 }

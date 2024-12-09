@@ -59,34 +59,41 @@
         </div>
         <div class="content-section">
             <div class="headbar">
-                <input type="text" placeholder="Search" class="search-input">
-                <button class="search-button">Search</button>
+                <input id="search-input" type="text" placeholder="Search" class="search-input">
+                <button id="search-button" class="search-button">Search</button>
             </div>
             <div class="table-section">
                 <table class="children-table">
                     <thead>
                         <tr>
-                            <th>ID No.</th>
                             <th>Parent</th>
                             <th>Child</th>
-                            <th>Activity Name</th>
-                            <th>Status</th>
+                            <th>Availed Service</th>
+                            <th>Activity Date</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr id="child#">
-                            <td id="child-id">123</td>
-                            <td id="child-parent">Parent</td>
-                            <td id="child-child">Child</td>
-                            <td id="child-activity">Answer Activity</td>
-                            <td id="child-activity-status">Not yet done</td>
-                        </tr>
+                    <tbody id="tbody">
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+
+            
+        </div>
+    </div>
+
+    <div id="activitiesModal" class="modal">
+        <div id="modal-content-activities" class="modal-content">
+            
+        </div>
+    </div>
     <script src="/js/utilities.js"></script>
+    <script src="/js/therapist/activities.js"></script>
     <script src="/js/therapist/therapist-sidebar.js"></script>
 </body>
 </html>
