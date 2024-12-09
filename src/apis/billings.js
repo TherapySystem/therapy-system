@@ -13,7 +13,7 @@ const saveBilling = async (billingInfo) => {
     }
 }
 
-const getAllBillings = async (keyword) => {
+const getAllBillings = async (keyword = '') => {
     const billings = await db.ref(billingNode).once('value');
 
     const unfilteredParsedData = snapshotParser.snapshotParserWithIds(billings);
@@ -37,7 +37,17 @@ const getAllBillings = async (keyword) => {
     });
 };
 
+const getAllBillingAmount = async () => {
+    const billings = await getAllBillings();
+    const totalAmount = billings.reduce((total, billing) => {
+        return total + billing.amount;
+    }, 0);
+    
+    return totalAmount;
+};
+
 module.exports = {
     getAllBillings,
-    saveBilling
+    saveBilling,
+    getAllBillingAmount
 }

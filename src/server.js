@@ -104,7 +104,8 @@ app.get('/admin', verifyToken(''), async (req, res) => {
     } else if (req.user.role == 'cashier') {
         return res.redirect('/cashier');
     }
-    res.sendFile(path.join(publicPath, '../views/admin/home.html'));
+    // res.sendFile(path.join(publicPath, '../views/admin/home.html'));
+    res.redirect('/admin/children');
 })
 
 app.get('/admin/children', verifyToken('admin'), async (req, res) => {
@@ -389,6 +390,23 @@ app.post('/initiate-payroll', async (req, res) => {
     }
 
     res.send(returnResponse);
+});
+
+app.get('/get-reports', async (req, res) => {
+    const accounts = await accountsApi.getAllAccounts();
+    const children = await childrenApi.getAllChildren();
+    const enrollees = await enrollApi.getAllEnrollees();
+    const therapists = await accountsApi.getAllAccounts('therapist');
+
+    const billingAmount = await billingApi.getAllBillingAmount();
+
+    res.send({
+        totalAccounts: accounts.length,
+        totalTherapists: therapists.length,
+        totalChildren: children.length,
+        totalEnrollees: enrollees.length,
+        totalBillingAmount: billingAmount
+    });
 });
 
 // Cashier

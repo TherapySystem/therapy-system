@@ -10,9 +10,9 @@
 //     }
 // }
 
-document.getElementById('admin-menu-home').onclick = () => {
-    window.location.href = '/admin';
-}
+// document.getElementById('admin-menu-home').onclick = () => {
+//     window.location.href = '/admin';
+// }
 document.getElementById('admin-menu-children').onclick = () => {
     window.location.href = '/admin/children';
 }
