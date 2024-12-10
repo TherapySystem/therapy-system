@@ -209,6 +209,7 @@ app.put('/get-child-appointments', async (req, res) => {
 app.put('/get-child-by-id', async (req, res) => {
     const { childId } = req.body;
     const childInfo = snapshotParser.snapshotParseObject(await childrenApi.getChildById(childId));
+    console.log(childInfo);
     const therapistInfo = snapshotParser.snapshotParseObject(await accountsApi.getAccountById(childInfo.therapistId));
     childInfo.therapistName = therapistInfo.name;
     res.send(childInfo);
