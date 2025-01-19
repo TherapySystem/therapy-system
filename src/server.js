@@ -98,9 +98,11 @@ app.post('/image-upload/:childId', upload.single('file'), (req, res) => {
         return res.status(400).send('No file uploaded');
     }
 
+    console.log("file: ", req.file);
+
     const childId = req.params.childId || 'unknown';
     const today = moment().format('YYYYMMDD');
-    const filename = `${childId}_${today}${path.extname(file.originalname)}`;
+    const filename = `${childId}_${today}${path.extname(req.file.originalname)}`;
 
     console.log("Upload success! filename: ", filename);
     
