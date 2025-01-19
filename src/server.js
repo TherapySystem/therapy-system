@@ -249,7 +249,7 @@ app.put('/get-child-appointments', async (req, res) => {
 
 app.put('/get-child-billings', async (req, res) => {
     const { childId } = req.body;
-    const childBillings = await billingApi.getAllBillingsByChildId(childId);
+    const childBillings = await billingApi.getBillingsByChild(childId);
     res.send(childBillings);
 });
 
