@@ -457,8 +457,12 @@ app.put('/get-billing-image', (req, res) => {
     const { imageName } = req.body;
     const imagePath = path.join(__dirname, 'uploads', `${ imageName }.jpg`);
 
+    console.log('imageName', imageName);
+    console.log('imagePath', imagePath);
+
     res.sendFile(imagePath, (err) => {
         if (err) {
+            console.log('err: ', err);
             res.send('Error sending image');
         }
     });
