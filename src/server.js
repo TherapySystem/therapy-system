@@ -58,7 +58,7 @@ const storage = multer.diskStorage({
     },
 
     filename: (req, file, cb) => {
-        const childId = req.body.childId || 'unknown';
+        const childId = req.params.childId || 'unknown';
         const today = moment().format('YYYYMMDD');
         const filename = `${childId}_${today}${path.extname(file.originalname)}`;
         cb(null, filename);
@@ -93,12 +93,12 @@ io.on('connection', async (socket) => {
     })
 })
 
-app.post('/image-upload', upload.single('file'), (req, res) => {
+app.post('/image-upload/:childId', upload.single('file'), (req, res) => {
     if (!req.file) {
         return res.status(400).send('No file uploaded');
     }
 
-    const childId = req.body.childId || 'unknown';
+    const childId = req.params.childId || 'unknown';
     const today = moment().format('YYYYMMDD');
     const filename = `${childId}_${today}${path.extname(file.originalname)}`;
 
