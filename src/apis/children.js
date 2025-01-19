@@ -11,7 +11,6 @@ const addChild = async (childInfo) => {
         console.log('error in adding child: ' + error.message);
         return false;
     }
-    
 }
 
 const getAllChildren = async (keyword = '') => {

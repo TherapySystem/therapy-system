@@ -9,6 +9,8 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
@@ -49,6 +51,22 @@ app.use((req, res, next) => {
 
 app.use(express.static(publicPath));
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+
+    },
+
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
+if (!fs.existsSync('uploads')) {
+    fs.mkdirSync('uploads');
+}
+
 io.on('connection', async (socket) => {
     socket.on('joinRoom', async ({ therapistId, childId }) => {
         const chatRoom = `${ therapistId }_${ childId }`;
@@ -70,6 +88,17 @@ io.on('connection', async (socket) => {
         io.to(chatRoom).emit('receiveMessage', messageData);
     })
 })
+
+app.post('image-upload', upload.single('file'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded');
+    }
+
+    res.send({
+        message: 'File uploaded successfully',
+        filename: req.file.filename
+    });
+});
 
 app.get('/', async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/home.html'));

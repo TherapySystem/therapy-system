@@ -43,9 +43,14 @@ submitRegistration.addEventListener('click', async () => {
 
         if (result.status == 'success') {
             showSuccessNotification(result.message);
-            setTimeout(() => {
+
+            var modal = document.getElementById("myModal");
+            var span = document.getElementsByClassName("close")[0];
+
+            modal.style.display = "block";
+            span.onclick = function() {
                 window.location.href = "/register";
-            }, 1000);
+            }
         } else {
             showErrorNotification(result.message);
         }
