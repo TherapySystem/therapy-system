@@ -455,7 +455,7 @@ app.get('/get-reports', async (req, res) => {
 
 app.put('/get-billing-image', (req, res) => {
     const { imageName } = req.body;
-    const imagePath = path.join(__dirname, 'uploads', `${ imageName }.jpg`);
+    const imagePath = path.join(__dirname, '../uploads', `${ imageName }.jpg`);
 
     console.log('imageName', imageName);
     console.log('imagePath', imagePath);
