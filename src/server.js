@@ -247,6 +247,12 @@ app.put('/get-child-appointments', async (req, res) => {
     res.send(childAppointments);
 });
 
+app.put('/get-child-billings', async (req, res) => {
+    const { childId } = req.body;
+    const childBillings = await billingApi.getAllBillingsByChildId(childId);
+    res.send(childBillings);
+});
+
 app.put('/get-child-by-id', async (req, res) => {
     const { childId } = req.body;
     const childInfo = snapshotParser.snapshotParseObject(await childrenApi.getChildById(childId));

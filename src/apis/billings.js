@@ -57,9 +57,15 @@ const setBillingStatus = async (billingId, status) => {
     }
 }
 
+const getBillingsByChild = async (id) => {
+    const billings = await getAllBillings();
+    return billings.filter(billing => billing.childId == id); 
+}
+
 module.exports = {
     getAllBillings,
     saveBilling,
     getAllBillingAmount,
-    setBillingStatus
+    setBillingStatus,
+    getBillingsByChild
 }
