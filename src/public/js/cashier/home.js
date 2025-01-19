@@ -147,8 +147,8 @@ const loadTable = async () => {
             <td>${ billing.child.parentFirstName } ${ billing.child.parentMiddleName } ${ billing.child.parentLastName }</td>
             <td>Php ${ billing.amount }</td>
             <td>${ billing.paymentDate }</td>
-            <td>${ billing.paymentType == 'Online Transfer' ? billing.walletType : billing.paymentType }</td>
-            <td ${ billing.paymentType == 'Online Transfer' ? `id="paymentType-${billing.id}"` : '' }>${ billing.walletType ? billing.referenceCode : 'N/A' }</td>
+            <td>${ billing.billingType == 'Online Transfer' ? billing.walletType : billing.billingType }</td>
+            <td ${ billing.billingType == 'Online Transfer' ? `id="paymentType-${billing.id}"` : '' }>${ billing.walletType ? billing.referenceCode : 'N/A' }</td>
             <td>${ 
                 billing.status == 'Approved' ? 'Approved' : 
                 billing.status == 'Declined' ? 'Declined' : 
@@ -162,10 +162,10 @@ const loadTable = async () => {
                 </span>` : `N/A`
              }</td>
         </tr>`;
-        
+
         tbody.insertAdjacentHTML('beforeend', template);
 
-        if (billing.paymentType == 'Online Transfer') {
+        if (billing.billingType == 'Online Transfer') {
             const paymentType = document.getElementById(`paymentType-${ billing.id }`);
             paymentType.addEventListener('click', () => {
                 console.log('billing: ', billing.billingImage);
