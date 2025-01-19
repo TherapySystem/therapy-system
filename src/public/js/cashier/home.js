@@ -162,6 +162,8 @@ const loadTable = async () => {
                 </span>` : `N/A`
              }</td>
         </tr>`;
+        
+        tbody.insertAdjacentHTML('beforeend', template);
 
         if (billing.paymentType == 'Online Transfer') {
             const paymentType = document.getElementById(`paymentType-${ billing.id }`);
@@ -186,7 +188,6 @@ const loadTable = async () => {
             });
         }
 
-        tbody.insertAdjacentHTML('beforeend', template);
     }
     hideLoadingScreen();
 }
