@@ -46,8 +46,20 @@ const getAllBillingAmount = async () => {
     return totalAmount;
 };
 
+const setBillingStatus = async (billingId, status) => {
+    try {
+        await db.ref(billingNode).child(billingId).update({
+            status: status
+        });
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
 module.exports = {
     getAllBillings,
     saveBilling,
-    getAllBillingAmount
+    getAllBillingAmount,
+    setBillingStatus
 }

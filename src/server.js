@@ -466,7 +466,8 @@ app.post('/save-billing', async (req, res) => {
         childId, 
         amount, 
         paymentDate,
-        billingType: 'Onsite Payment'
+        billingType: 'Onsite Payment',
+        status: 'Approved'
     };
 
     const response = await billingApi.saveBilling(billingInfo);
@@ -498,7 +499,8 @@ app.post('/submit-payment', async (req, res) => {
         billingType: 'Online Transfer',
         referenceCode,
         walletType,
-        billingImage: filename
+        billingImage: filename,
+        status: 'Pending'
     };
 
     const response = await billingApi.saveBilling(billingInfo);
@@ -512,6 +514,31 @@ app.post('/submit-payment', async (req, res) => {
         returnResponse.status = 'error';
         returnResponse.message = 'Something went wrong, try again later';
     }
+
+    res.send(returnResponse);
+});
+
+app.post('/billing-status', async (req, res) => {
+    const { billingId, status } = req.body;
+
+    const returnResponse = {};
+    
+    if (status == 'Approved' || status == 'Declined') {
+        const response = await billingApi.setBillingStatus(billingId, status);
+    
+        if (response) {
+            returnResponse.status = 'success';
+            returnResponse.message = 'Billing status successfully changed!';
+        } else {
+            returnResponse.status = 'error';
+            returnResponse.message = 'Something went wrong, try again later';
+        }
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Invalid status';
+    }
+
+    res.send(returnResponse);
 });
 
 // Secretary
