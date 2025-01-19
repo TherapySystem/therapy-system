@@ -163,7 +163,7 @@ const loadTable = async () => {
              }</td>
         </tr>`;
 
-        if (billing.paymentType = 'Online Transfer') {
+        if (billing.paymentType == 'Online Transfer') {
             const paymentType = document.getElementById(`paymentType-${ billing.id }`);
             paymentType.addEventListener('click', () => {
                 console.log('billing: ', billing.billingImage);
