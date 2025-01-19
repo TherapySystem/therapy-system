@@ -452,6 +452,18 @@ app.get('/get-reports', async (req, res) => {
 });
 
 // Cashier
+
+app.get('/get-billing-image', (req, res) => {
+    const { imageName } = req.body;
+    const imagePath = path.join(__dirname, 'uploads', `${ imageName }.jpg`);
+
+    res.sendFile(imagePath, (err) => {
+        if (err) {
+            res.send('Error sending image');
+        }
+    });
+});
+
 app.put('/get-all-billings', async (req, res) => {
     const { keyword } = req.body;
     const allBillings = await billingApi.getAllBillings(keyword);

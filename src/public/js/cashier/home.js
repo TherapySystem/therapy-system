@@ -147,8 +147,8 @@ const loadTable = async () => {
             <td>${ billing.child.parentFirstName } ${ billing.child.parentMiddleName } ${ billing.child.parentLastName }</td>
             <td>Php ${ billing.amount }</td>
             <td>${ billing.paymentDate }</td>
-            <td>${ billing.billingType == 'Online Transfer' ? billing.walletType : billing.billingType }</td>
-            <td ${ billing.billingType == 'Online Transfer' ? `id="paymentType-${billing.id}"` : '' }>${ billing.walletType ? billing.referenceCode : 'N/A' }</td>
+            <td ${ billing.billingType == 'Online Transfer' ? `id="paymentType-${billing.id}"` : '' } class="billing-type">${ billing.billingType == 'Online Transfer' ? billing.walletType : billing.billingType }</td>
+            <td>${ billing.walletType ? billing.referenceCode : 'N/A' }</td>
             <td>${ 
                 billing.status == 'Approved' ? 'Approved' : 
                 billing.status == 'Declined' ? 'Declined' : 
@@ -168,7 +168,41 @@ const loadTable = async () => {
         if (billing.billingType == 'Online Transfer') {
             const paymentType = document.getElementById(`paymentType-${ billing.id }`);
             paymentType.addEventListener('click', () => {
-                console.log('billing: ', billing.billingImage);
+                showLoadingScreen("Loading image...");
+                const imageModal = document.getElementById('imageModal');
+                const closeButton = document.getElementById('closeButton');
+                const imagePreview = document.getElementById('imagePreview');
+
+                fetch('/get-billing-image', {
+                    method: 'GET',
+                    credentials: "include",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ imageName: billing.billingImage})
+                }).then(response => response.blob())
+                .then(imageBlob => {
+                    const imageUrl = URL.createObjectURL(imageBlob);
+                    imagePreview.src = imageUrl;
+        
+                    imageModal.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error fetching the image:', error);
+                })
+                .finally(() => {
+                    hideLoadingScreen();
+                });
+
+                closeButton.addEventListener('click', () => {
+                    imageModal.style.display = 'none';
+                });
+                
+                window.addEventListener('click', (event) => {
+                    if (event.target === imageModal) {
+                        imageModal.style.display = 'none';
+                    }
+                });
             });
         }
 
