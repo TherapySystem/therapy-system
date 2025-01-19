@@ -174,7 +174,7 @@ const loadTable = async () => {
                 const imagePreview = document.getElementById('imagePreview');
 
                 fetch('/get-billing-image', {
-                    method: 'GET',
+                    method: 'PUT',
                     credentials: "include",
                     headers: {
                         'Content-Type': 'application/json',

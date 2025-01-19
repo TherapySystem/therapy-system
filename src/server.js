@@ -453,7 +453,7 @@ app.get('/get-reports', async (req, res) => {
 
 // Cashier
 
-app.get('/get-billing-image', (req, res) => {
+app.put('/get-billing-image', (req, res) => {
     const { imageName } = req.body;
     const imagePath = path.join(__dirname, 'uploads', `${ imageName }.jpg`);
 
