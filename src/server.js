@@ -460,6 +460,16 @@ app.put('/get-billing-image', (req, res) => {
     console.log('imageName', imageName);
     console.log('imagePath', imagePath);
 
+    const uploadsDir = path.join(__dirname, 'uploads');
+
+    fs.readdir(uploadsDir, (err, files) => {
+        if (err) {
+          console.error('Error reading the directory:', err);
+        } else {
+          console.log('Contents of uploads directory:', files);
+        }
+    })
+
     res.sendFile(imagePath, (err) => {
         if (err) {
             console.log('err: ', err);
