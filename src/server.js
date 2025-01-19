@@ -53,11 +53,14 @@ app.use(express.static(publicPath));
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-
+        cb(null, 'uploads/');
     },
 
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
+        const childId = req.body.childId || 'unknown';
+        const today = moment().format('YYYYMMDD');
+        const filename = `${childId}_${today}${path.extname(file.originalname)}`;
+        cb(null, filename);
     }
 });
 
@@ -94,6 +97,12 @@ app.post('image-upload', upload.single('file'), (req, res) => {
         return res.status(400).send('No file uploaded');
     }
 
+    const childId = req.body.childId || 'unknown';
+    const today = moment().format('YYYYMMDD');
+    const filename = `${childId}_${today}${path.extname(file.originalname)}`;
+
+    console.log("Upload success! filename: ", filename);
+    
     res.send({
         message: 'File uploaded successfully',
         filename: req.file.filename
