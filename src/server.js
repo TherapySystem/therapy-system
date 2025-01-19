@@ -465,7 +465,8 @@ app.post('/save-billing', async (req, res) => {
         id: generateUniqueId('B'),
         childId, 
         amount, 
-        paymentDate
+        paymentDate,
+        billingType: 'Onsite Payment'
     };
 
     const response = await billingApi.saveBilling(billingInfo);
@@ -481,6 +482,36 @@ app.post('/save-billing', async (req, res) => {
     }
 
     res.send(returnResponse);
+});
+
+app.post('/submit-payment', async (req, res) => {
+    const { referenceCode, amount, walletType, childId } = req.body;
+
+    const today = moment().format('YYYYMMDD');
+    const filename = `${childId}_${today}`;
+
+    const billingInfo = {
+        id: generateUniqueId('B'),
+        childId,
+        amount,
+        paymentDate: moment().format('MMMM DD YYYY'),
+        billingType: 'Online Transfer',
+        referenceCode,
+        walletType,
+        billingImage: filename
+    };
+
+    const response = await billingApi.saveBilling(billingInfo);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Billing added successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
 });
 
 // Secretary
