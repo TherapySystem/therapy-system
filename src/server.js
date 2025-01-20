@@ -466,7 +466,7 @@ app.put('/get-billing-image', (req, res) => {
     console.log('imageName', imageName);
     console.log('imagePath', imagePath);
 
-    const uploadsDir = path.join(__dirname, 'uploads');
+    const uploadsDir = path.join(__dirname, '../uploads');
 
     fs.readdir(uploadsDir, (err, files) => {
         if (err) {
