@@ -139,7 +139,7 @@ const loadTable = async () => {
 
     tbody.innerHTML = '';
     
-    for (var i = 0; i < allBillings.length; i++) {
+    for (var i = allBillings.length - 1; i >= 0; i--) {
         const billing = allBillings[i];
         const template = `
         <tr id="billing-${ billing.id }">
