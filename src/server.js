@@ -60,7 +60,7 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         const childId = req.params.childId || 'unknown';
         const today = moment().format('YYYYMMDD');
-        const filename = `${childId}_${today}${path.extname(file.originalname)}`;
+        const filename = req.params.profileName ? req.params.profileName : `${childId}_${today}${path.extname(file.originalname)}`;
         cb(null, filename);
     }
 });
@@ -260,6 +260,17 @@ app.put('/get-child-by-id', async (req, res) => {
     const therapistInfo = snapshotParser.snapshotParseObject(await accountsApi.getAccountById(childInfo.therapistId));
     childInfo.therapistName = therapistInfo.name;
     res.send(childInfo);
+});
+
+app.put('/get-child-profile', async (req, res) => {
+
+});
+
+app.post('/set-child-profile/:profileName', upload.single('file'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded');
+    }
+
 });
 
 // Home
