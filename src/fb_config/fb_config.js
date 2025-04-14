@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 
-const serviceAccount = require('../../therapysystem-da6bd-firebase-adminsdk-pxhgg-47af7b9f27.json');
+// const serviceAccount = require('../../keys/therapysystem-da6bd-firebase-adminsdk-pxhgg-47af7b9f27.json');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
