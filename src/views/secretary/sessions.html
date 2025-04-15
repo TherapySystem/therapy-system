@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="/css/secretary/sidebar.css">
     <link rel="stylesheet" href="/css/secretary/sessions.css">
     <title>Secretary - Sessions</title>
+
+    <style>
+        th {
+            cursor: pointer;
+        }
+    </style>
+
 </head>
 <body>
     <div class="sidebar">
@@ -78,13 +85,13 @@
                 </div>
             </div>
             <div class="table-section">
-                <table class="session-table">
+                <table id="sessions-table" class="session-table">
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Therapist</th>
-                            <th>Child</th>
+                            <th onclick="sortTable(0)" >Date</th>
+                            <th onclick="sortTable(1)" >Time</th>
+                            <th onclick="sortTable(2)" >Therapist</th>
+                            <th onclick="sortTable(3)" >Child</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -125,6 +132,40 @@
             <button id="confirm-button">Confirm</button>
         </div>
     </div>
+
+    <script>
+        let sortDirection = [true, true, true, true, true, true, true, true];
+
+        function sortTable(columnIndex) {
+            let table = document.getElementById("sessions-table");
+            let rows = Array.from(table.rows).slice(1);
+            let isAscending = sortDirection[columnIndex];
+
+            rows.sort((rowA, rowB) => {
+                let cellA = rowA.cells[columnIndex].innerText.trim();
+                let cellB = rowB.cells[columnIndex].innerText.trim();
+
+                if (columnIndex === 4) {
+                    let numA = parseFloat(cellA.replace(/[^\d.-]/g, ''));
+                    let numB = parseFloat(cellB.replace(/[^\d.-]/g, ''));
+                    return isAscending ? numA - numB : numB - numA;
+                }
+
+                if (columnIndex === 3) {
+                    let dateA = new Date(cellA);
+                    let dateB = new Date(cellB);
+                    return isAscending ? dateA - dateB : dateB - dateA;
+                }
+
+                return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+            });
+
+            sortDirection[columnIndex] = !isAscending;
+
+            rows.forEach(row => table.appendChild(row));
+        }
+    </script>
+
     <script src="/js/utilities.js"></script>
     <script src="/js/secretary/sessions.js"></script>
     <script src="/js/secretary/secretary-sidebar.js"></script>

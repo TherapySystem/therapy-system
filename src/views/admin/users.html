@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="/css/admin/sidebar.css">
     <link rel="stylesheet" href="/css/admin/users.css">
     <title>Admin - Children</title>
+
+    <style>
+        th {
+            cursor: pointer;
+        }
+    </style>
+
 </head>
 <body>
     <div class="sidebar">
@@ -78,10 +85,10 @@
                 <table id="users-table" class="users-table">
                     <thead>
                         <tr>
-                            <th>ID No.</th>
-                            <th>Name</th>
-                            <th>Role</th>
-                            <th>Action</th>
+                            <th onclick="sortTable(0)" >ID No.</th>
+                            <th onclick="sortTable(1)" >Name</th>
+                            <th onclick="sortTable(2)" >Role</th>
+                            <th onclick="sortTable(3)" >Action</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
@@ -128,6 +135,39 @@
 
         </div>
     </div>
+
+    <script>
+        let sortDirection = [true, true, true, true, true, true, true, true];
+
+        function sortTable(columnIndex) {
+            let table = document.getElementById("users-table");
+            let rows = Array.from(table.rows).slice(1);
+            let isAscending = sortDirection[columnIndex];
+
+            rows.sort((rowA, rowB) => {
+                let cellA = rowA.cells[columnIndex].innerText.trim();
+                let cellB = rowB.cells[columnIndex].innerText.trim();
+
+                if (columnIndex === 4) {
+                    let numA = parseFloat(cellA.replace(/[^\d.-]/g, ''));
+                    let numB = parseFloat(cellB.replace(/[^\d.-]/g, ''));
+                    return isAscending ? numA - numB : numB - numA;
+                }
+
+                if (columnIndex === 3) {
+                    let dateA = new Date(cellA);
+                    let dateB = new Date(cellB);
+                    return isAscending ? dateA - dateB : dateB - dateA;
+                }
+
+                return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+            });
+
+            sortDirection[columnIndex] = !isAscending;
+
+            rows.forEach(row => table.appendChild(row));
+        }
+    </script>
 
     <script src="/js/utilities.js"></script>
     <script src="/js/admin/users.js"></script>
