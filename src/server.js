@@ -847,6 +847,12 @@ app.put('/get-suggested-activities', async (req, res) => {
     res.send(response);
 });
 
+app.put('/get-activity-ratings', async (req, res) => {
+    const { childId } = req.body;
+    const response = await activitiesApi.getChildActivityRatings(childId);
+    res.send(response);
+});
+
 function generateUniqueId(prefix) {
     const now = new Date();
     const uniqueId = `${prefix}${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}` +

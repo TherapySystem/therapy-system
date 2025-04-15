@@ -46,7 +46,19 @@ const getChildSuggestedActivities = async (childId) => {
     return suggestedActivities;
 }
 
+const getChildActivityRatings = async (childId) => {
+    const child = snapshotParser.snapshotParseObject(await children.getChildById(childId));
+
+    const activities = child.activities;
+    if (!activities) {
+        return {};
+    }
+
+    return activities;
+}
+
 module.exports = {
     addActivity,
+    getChildActivityRatings,
     getChildSuggestedActivities
 }
