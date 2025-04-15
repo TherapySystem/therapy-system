@@ -72,7 +72,6 @@ const checkChildCredentials = async (username, password) => {
     return enrollee;
 }
 
-
 module.exports = {
     addEnrollee,
     getAllEnrollees,

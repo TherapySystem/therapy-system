@@ -28,10 +28,11 @@ const addNewBilling = async () => {
     const childSelection = document.getElementById('child');
     const amountInput = document.getElementById('amount');
     const paymentDate = document.getElementById('paymentDate');
+    const validSession = document.getElementById('validSession');
 
     console.log(paymentDate.value);
 
-    if (!childSelection.value || !amountInput.value || !paymentDate.value) {
+    if (!childSelection.value || !amountInput.value || !paymentDate.value || !validSession.value) {
         showErrorNotification('Please fill out all fields');
         return;
     }
@@ -55,7 +56,8 @@ const addNewBilling = async () => {
         body: JSON.stringify({ 
             childId: childSelection.value, 
             amount: amountInput.value, 
-            paymentDate: formattedDate
+            paymentDate: formattedDate,
+            validSession: validSession.value
         })
     });
 
@@ -82,11 +84,12 @@ const loadFunctions = async () => {
     const confirmButton = document.getElementById('confirm-button');
     const childSelection = document.getElementById('child');
     const modal = document.getElementById('modal');
-    const closeModal = document.querySelector('.close');
-    
+    const closeModal = document.getElementById('close-modal');
+
     closeModal.addEventListener('click', () => {
         modal.style.display = 'none';
     });
+
     newBilling.addEventListener('click', () => {
         modal.style.display = 'block';
     });
@@ -133,6 +136,7 @@ const setBillingFunction = async (billingId, isApprove) => {
 
 const loadTable = async () => {
     showLoadingScreen('Loading billings...');
+    
     const tbody = document.getElementById('tbody');
     const keyword = document.getElementById('search-input').value;
     const allBillings = await loadBillings(keyword);
@@ -148,6 +152,7 @@ const loadTable = async () => {
             <td>Php ${ billing.amount }</td>
             <td>${ billing.paymentDate }</td>
             <td ${ billing.billingType == 'Online Transfer' ? `id="paymentType-${billing.id}"` : '' } class="billing-type">${ billing.billingType == 'Online Transfer' ? billing.walletType : billing.billingType }</td>
+            <td>${ billing.validSession ? billing.validSession + " session/s" : "N/A" }</td>
             <td>${ billing.walletType ? billing.referenceCode : 'N/A' }</td>
             <td>${ 
                 billing.status == 'Approved' ? 'Approved' : 

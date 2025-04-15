@@ -32,3 +32,33 @@
         color: #054415;
     }
 }
+
+.canvases {
+    display: flex;
+    flex-wrap: wrap;
+    flex-flow: row;
+    width: 100%;
+}
+
+.canvases > canvas {
+    width: 500px !important;
+    height: 250px!important;
+}
+
+#generatePDF {
+    background-color: #12a80d;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #12a80d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    width: max-content;
+    float: right;
+    margin-right: 10px;
+}
+
+#generatePDF:hover {
+    background-color: #095f06;
+    border: 2px solid #095f06;
+}

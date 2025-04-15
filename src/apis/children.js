@@ -32,6 +32,68 @@ const getAllChildren = async (keyword = '') => {
     return filteredChildren;
 }
 
+const getMonthlyEnrollees = async () => {
+    const allEnrollees = await getAllChildren();
+
+    const monthlyEnrollees = [];
+    const months = {
+        "January": 0,
+        "February": 1,
+        "March": 2,
+        "April": 3,
+        "May": 4,
+        "June": 5,
+        "July": 6,
+        "August": 7,
+        "September": 8,
+        "October": 9,
+        "November": 10,
+        "December": 11,
+    }
+
+    Object.keys(months).forEach(month => {
+        monthlyEnrollees[months[month]] = { "month": month, "value": 0 };
+    });
+    for (var i = 0; i < allEnrollees.length; i++) {
+        const enrollee = allEnrollees[i];
+
+        const month = getMonthFromId(enrollee.id);
+        
+        const initialValue = monthlyEnrollees[months[month]].value;
+
+        monthlyEnrollees[months[month]].value = initialValue + 1;
+    }
+
+    return monthlyEnrollees;
+}
+
+const getServiceEnrollees = async () => {
+    const allEnrollees = await getAllChildren();
+
+    const services = [
+        {"service": "Occupational Therapy", "enrollees": 0},
+        {"service": "Shadow Class", "enrollees": 0},
+        {"service": "Speech Therapy", "enrollees": 0},
+        {"service": "Developmental Class", "enrollees": 0}
+    ]
+
+    const serviceIndex = {
+        "Occupational Therapy": 0,
+        "Shadow Class": 1,
+        "Speech Therapy": 2,
+        "Developmental Class": 3
+    };
+
+    for (var i = 0; i < allEnrollees.length; i++) {
+        const enrollee = allEnrollees[i];
+
+        const enrolleeService = enrollee.service;
+        services[serviceIndex[enrolleeService]].enrollees += 1;
+    }
+
+    return services;
+}
+
 const getChildrenByTherapist = async (keyword, therapistId) => {
     const children = await getAllChildren(keyword); 
 
@@ -83,6 +145,15 @@ const getChildActivities = async (childId) => {
     return activities;
 }
 
+function getMonthFromId(id) {
+    const monthNumber = parseInt(id.slice(5, 7));
+    const months = [
+        "January", "February", "March", "April", "May", "June", 
+        "July", "August", "September", "October", "November", "December"
+    ];
+    return months[monthNumber - 1];
+}
+
 module.exports = {
     addChild,
     getAllChildren,
@@ -92,5 +163,8 @@ module.exports = {
     newChildActivity,
     getChildActivities,
 
-    checkChildCredentials
+    checkChildCredentials,
+    
+    getMonthlyEnrollees,
+    getServiceEnrollees
 }

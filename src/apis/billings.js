@@ -62,10 +62,48 @@ const getBillingsByChild = async (id) => {
     return billings.filter(billing => billing.childId == id); 
 }
 
+const getBillingsMonthlySales = async () => {
+    const billings = await getAllBillings();
+
+    const sales = [];
+    const months = {
+        "January": 0,
+        "February": 1,
+        "March": 2,
+        "April": 3,
+        "May": 4,
+        "June": 5,
+        "July": 6,
+        "August": 7,
+        "September": 8,
+        "October": 9,
+        "November": 10,
+        "December": 11,
+    }
+
+    Object.keys(months).forEach(month => {
+        sales[months[month]] = { "month": month, "value": 0 };
+    });
+
+    for (var i = 0; i < billings.length; i++) {
+        const billing = billings[i];
+
+        const amount = billing.amount ? parseInt(billing.amount) : 0;
+        const month = billing.paymentDate.split(" ")[0];
+
+        const initialValue = sales[months[month]] ? sales[months[month]].value : 0;
+
+        sales[months[month]] = { "month" : month, "value": initialValue + amount};
+    }
+
+    return sales;
+}
+
 module.exports = {
     getAllBillings,
     saveBilling,
     getAllBillingAmount,
     setBillingStatus,
-    getBillingsByChild
+    getBillingsByChild,
+    getBillingsMonthlySales
 }

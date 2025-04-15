@@ -468,6 +468,16 @@ app.get('/get-reports', async (req, res) => {
     });
 });
 
+app.get('/get-chart-reports', async (req, res) => {
+    const response = {
+        "sales" : await billingApi.getBillingsMonthlySales(),
+        "enrollees": await childrenApi.getMonthlyEnrollees(),
+        "services": await childrenApi.getServiceEnrollees()
+    }
+
+    res.send(response);
+});
+
 // Cashier
 
 app.put('/get-billing-image', (req, res) => {
@@ -502,7 +512,7 @@ app.put('/get-all-billings', async (req, res) => {
 });
 
 app.post('/save-billing', async (req, res) => {
-    const { childId, amount, paymentDate } = req.body;
+    const { childId, amount, paymentDate, validSession } = req.body;
 
     const billingInfo = {
         id: generateUniqueId('B'),
@@ -510,7 +520,8 @@ app.post('/save-billing', async (req, res) => {
         amount, 
         paymentDate,
         billingType: 'Onsite Payment',
-        status: 'Approved'
+        status: 'Approved',
+        validSession
     };
 
     const response = await billingApi.saveBilling(billingInfo);
@@ -529,7 +540,7 @@ app.post('/save-billing', async (req, res) => {
 });
 
 app.post('/submit-payment', async (req, res) => {
-    const { referenceCode, amount, walletType, childId } = req.body;
+    const { referenceCode, amount, walletType, childId, validSession } = req.body;
 
     const today = moment().format('YYYYMMDD');
     const filename = `${childId}_${today}`;
@@ -543,7 +554,8 @@ app.post('/submit-payment', async (req, res) => {
         referenceCode,
         walletType,
         billingImage: filename,
-        status: 'Pending'
+        status: 'Pending',
+        validSession
     };
 
     const response = await billingApi.saveBilling(billingInfo);

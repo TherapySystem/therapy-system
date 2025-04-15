@@ -8,6 +8,42 @@
     <link rel="stylesheet" href="/css/admin/general.css">
     <link rel="stylesheet" href="/css/admin/sidebar.css">
     <link rel="stylesheet" href="/css/admin/reports.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;  /* Hide everything else */
+            }
+    
+            .main-section, .main-section * {
+                visibility: visible;  /* Make only .main-section visible */
+            }
+    
+            .main-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            #generatePDF {
+                visibility: hidden;
+            }
+
+            .canvases {
+                display: flex;
+                flex-wrap: wrap;
+                flex-flow: column;
+                width: 100%;
+            }
+
+            .canvases > canvas {
+                width: 700px !important;
+                height: 350px!important;
+            }
+        }
+    </style>
     <title>Admin - Children</title>
 </head>
 <body>
@@ -63,10 +99,148 @@
     <div class="main-section">
         <div class="header-section">
             <h2>Reports</h2>
+
+            <div class="option">
+                <button id="generatePDF">Generate PDF File</button>
+            </div>
+
             <div class="report-headers">
+            </div>
+            <div class="canvases">
+                <canvas id="salesChart"></canvas>
+                <canvas id="enrolleesChart"></canvas>
+                <canvas id="servicesChart"></canvas>
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('generatePDF').addEventListener('click', function() {
+            window.print();
+        });
+    </script>
+
+    <script>
+        // Register the data labels plugin
+        Chart.register(ChartDataLabels);
+
+        fetch('/get-chart-reports')
+        .then(response => response.json())
+        .then(data => {
+            var ctxSales = document.getElementById('salesChart').getContext('2d');
+            var salesChart = new Chart(ctxSales, {
+                type: 'line',
+                data: {
+                    labels: data.sales.map(item => item.month),
+                    datasets: [{
+                        label: 'Sales',
+                        data: data.sales.map(item => item.value),
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        fill: false,
+                        datalabels: {
+                            display: true,
+                            color: 'black', // Set label color
+                            font: {
+                                size: 12, // Size of the labels
+                            },
+                            align: 'top', // Position the label above the data point
+                            formatter: (value) => value.toLocaleString() // Format the number with commas
+                        }
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Sales per Month'
+                        },
+                        datalabels: {
+                            anchor: 'end', // Position data labels relative to the point
+                            clamp: true // Make sure the labels stay inside the canvas
+                        }
+                    }
+                }
+            });
+
+            var ctxEnrollees = document.getElementById('enrolleesChart').getContext('2d');
+            var enrolleesChart = new Chart(ctxEnrollees, {
+                type: 'line',
+                data: {
+                    labels: data.enrollees.map(item => item.month),
+                    datasets: [{
+                        label: 'Enrollees',
+                        data: data.enrollees.map(item => item.value),
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        fill: false,
+                        datalabels: {
+                            display: true,
+                            color: 'black',
+                            font: {
+                                size: 12,
+                            },
+                            align: 'top',
+                            formatter: (value) => value.toLocaleString() // Format numbers with commas
+                        }
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Enrollees per Month'
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            clamp: true
+                        }
+                    }
+                }
+            });
+
+            var ctxServices = document.getElementById('servicesChart').getContext('2d');
+            var servicesChart = new Chart(ctxServices, {
+                type: 'bar',
+                data: {
+                    labels: data.services.map(item => item.service),
+                    datasets: [{
+                        label: 'Enrollees per Service',
+                        data: data.services.map(item => item.enrollees),
+                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1,
+                        datalabels: {
+                            display: true,
+                            color: 'black',
+                            font: {
+                                size: 12,
+                            },
+                            align: 'top',
+                            formatter: (value) => value.toLocaleString()
+                        }
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Enrollees in Services'
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            clamp: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.log('Error fetching data:', error));
+    </script>
+    
     <script src="/js/utilities.js"></script>
     <script src="/js/admin/reports.js"></script>
     <script src="/js/admin/admin-sidebar.js"></script>

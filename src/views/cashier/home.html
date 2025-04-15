@@ -66,6 +66,7 @@
                             <th>Amount</th>
                             <th>Payment Date</th>
                             <th>Payment Type</th>
+                            <th>Valid Sessions</th>
                             <th>Reference Code</th>
                             <th>Status</th>
                         </tr>
@@ -80,7 +81,7 @@
 
     <div id="modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span id="close-modal" class="close">&times;</span>
             <h3>Add new billing</h3>
             <div class="input-container">
                 <select id="child" name="child">
@@ -90,6 +91,10 @@
             <div class="input-container">
                 <input type="number" id="amount" name="amount" placeholder=" ">
                 <label for="amount">Amount</label>
+            </div>
+            <div class="input-container">
+                <input type="number" id="validSession" name="validSession" placeholder=" " step="1">
+                <label for="validSession">Valid Sessions</label>
             </div>
             <div class="input-container">
                 <input type="date" id="paymentDate" name="paymentDate" placeholder=" ">
