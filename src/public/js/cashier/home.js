@@ -151,7 +151,7 @@ const loadTable = async () => {
         <tr id="billing-${ billing.id }">
             <td>${ billing.child.childFirstName } ${ billing.child.childMiddleName } ${ billing.child.childLastName }</td>
             <td>${ billing.child.parentFirstName } ${ billing.child.parentMiddleName } ${ billing.child.parentLastName }</td>
-            <td>Php ${ billing.amount }</td>
+            <td>₱ ${ billing.amount }</td>
             <td>${ billing.paymentDate }</td>
             <td ${ billing.billingType == 'Online Transfer' ? `id="paymentType-${billing.id}"` : '' } class="billing-type">${ billing.billingType == 'Online Transfer' ? billing.walletType : billing.billingType }</td>
             <td>${ billing.validSession ? billing.validSession + " session/s" : "N/A" }</td>

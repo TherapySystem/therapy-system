@@ -15,8 +15,13 @@ submitRegistration.addEventListener('click', async () => {
     const mobileNumber = document.getElementById('mobileNumber').value;
     const address = document.getElementById('address').value;
 
+    const terms = document.getElementById('terms').checked;
 
     if (firstNameChild && lastNameChild && middleNameChild && birthDateChild && username && password && firstName && lastName && middleName && birthDate && email && mobileNumber && address) {
+        if (!terms) {
+            showErrorNotification("Please agree to the terms and conditions");
+            return;
+        }
         const response = await fetch('/register-new-patient', {
             method: 'POST',
             headers: {

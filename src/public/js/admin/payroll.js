@@ -186,7 +186,7 @@ const loadTable = async () => {
         const template = `<tr id="user-${ user.id }">
             <td id="users-id">${ user.id }</td>
             <td id="users-name">${ user.name }</td>
-            <td id="users-salary">${ user.salary ? "Php " + user.salary : 'No salary yet' }</td>
+            <td id="users-salary">${ user.salary ? "₱ " + user.salary : 'No salary yet' }</td>
             <td id="users-date-coverage">${ user.coverageDate ? formatDate(user.coverageDate.substring(0, 10)) + ' - ' +  formatDate(user.coverageDate.substring(13)) : '' }</td>
         </tr>`;
 

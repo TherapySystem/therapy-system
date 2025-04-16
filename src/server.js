@@ -136,6 +136,10 @@ app.get('/unauthorized', async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/unauthorized.html'));
 })
 
+app.get('/terms-and-conditions', async (req, res) => {
+    res.sendFile(path.join(publicPath, '../views/terms_and_conditions.html'));
+})
+
 // ADMIN
 app.get('/admin', verifyToken(''), async (req, res) => {
     if (req.user.role == 'secretary') {
