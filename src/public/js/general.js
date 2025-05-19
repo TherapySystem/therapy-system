@@ -1,6 +1,9 @@
 document.getElementById('home-menu').onclick = () => {
     window.location.href = '/';
 }
+document.getElementById('announcement-menu').onclick = () => {
+    window.location.href = '/announcements';
+}
 document.getElementById('login-menu').onclick = () => {
     window.location.href = '/login';
 }

@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/general.css">
     <link rel="stylesheet" href="/css/bar.css">
-    <link rel="stylesheet" href="/css/about-us.css">
-    <title>About us</title>
+    <link rel="stylesheet" href="/css/announcement.css">
+    <link rel="stylesheet" href="/css/utilities.css">
+    <title>Thera-able Announcements</title>
 </head>
 <body>
     <div class="header-section">
@@ -32,7 +33,7 @@
         <div id="home-menu" class="menu-item">
             Homepage
         </div>
-        <div id="announcement-menu" class="menu-item">
+        <div id="announcement-menu" class="menu-item active-menu-item">
             Announcements
         </div>
         <div id="login-menu" class="menu-item">
@@ -44,30 +45,22 @@
         <div id="vacancies-menu" class="menu-item">
             Vacancies
         </div>
-        <div id="about-us-menu" class="menu-item active-menu-item">
+        <div id="about-us-menu" class="menu-item">
             About Us
         </div>
     </div>
 
     <div class="main-container">
-        <h3>We are Thera-able!</h3>
-        <div class="service-section">
-        
-            <div class="service-item">
-                <div class="service-image" style="background-image: url('/images/about_us.jpg');"></div>
-                <div class="service-details">
-                    Thera-able Occupational Therapy Centre is a neurological and developmental center located
-at A57 Techno Park, Brgy. Don Martin Marundan, Mati, Philippines. Our goal is to provide
-proficient neurological health and developmental care to the community, particularly for
-children. We aim to help them engage in active play, which fosters the life skills that can lead
-to long-term positive effects in society. We are also dedicated to spreading awareness about
-these important services.
-                </div>
-            </div>
-
+        <h3>Announcements</h3>
+        <div id="empty" class="empty">
+            <h3>No announcement so far...</h3>
+        </div>
+        <div id="announcement-area" class="announcement-area">
         </div>
     </div>
 
     <script src="/js/general.js"></script>
+    <script src="/js/utilities.js"></script>
+    <script src="/js/announcement.js"></script>
 </body>
 </html>

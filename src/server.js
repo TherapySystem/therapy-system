@@ -31,6 +31,7 @@ const snapshotParser = require('./apis/snapshotParser');
 // const reportsApi = require('./apis/reports');
 // const vacanciesApi = require('./apis/vacancies');
 const chatsApi = require('./apis/chats');
+const announcementApi = require('./apis/announcements');
 
 const { verifyToken, noToken } = require('./middleware/jwt_verifier');
 
@@ -39,9 +40,10 @@ const SECRET_KEY = process.env.SECRET_KEY;
 
 const publicPath = path.resolve(__dirname, './public');
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '10mb' }));
 app.use(cookieParser());
-app.use(express.urlencoded());
+app.use(express.urlencoded(({ extended: true, limit: '10mb' })));
+app.use(express.json({ limit: '10mb' }));
 app.use((req, res, next) => {
     res.header(`Access-Control-Allow-Origin', 'http://localhost:${ PORT }`);
     res.header('Access-Control-Allow-Credentials', 'true');
@@ -118,6 +120,10 @@ app.get('/', async (req, res) => {
 
 app.get('/login', noToken, async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/login.html'));
+})
+
+app.get('/announcements', async (req, res) => {
+    res.sendFile(path.join(publicPath, '../views/announcements.html'));
 })
 
 app.get('/vacancies', async (req, res) => {
@@ -219,6 +225,10 @@ app.get('/therapist/chats', verifyToken('therapist'), async (req, res) => {
 
 app.get('/therapist/activities', verifyToken('therapist'), async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/therapist/activities.html'));
+});
+
+app.get('/therapist/announcements', verifyToken('therapist'), async (req, res) => {
+    res.sendFile(path.join(publicPath, '../views/therapist/announcements.html'));
 });
 
 // Application
@@ -867,6 +877,102 @@ app.put('/get-activity-ratings', async (req, res) => {
     const { childId } = req.body;
     const response = await activitiesApi.getChildActivityRatings(childId);
     res.send(response);
+});
+
+app.put('/get-all-announcements', async (req, res) => {
+    const { keyword } = req.body;
+    const response = await announcementApi.getAllAnnouncements(keyword);
+    res.send(response);
+});
+
+app.post('/save-announcement', async (req, res) => {
+    const { title, description, image } = req.body;
+    const id = generateUniqueId('T');
+
+    if (!image) {
+        return res.json({ status: 'error', message: 'Image is required' });
+    }
+
+    const matches = image.match(/^data:(.+);base64,(.+)$/);
+    if (!matches) {
+        return res.json({ status: 'error', message: 'Invalid image format' });
+    }
+
+    const mimeType = matches[1];
+    const base64Data = matches[2];
+    const buffer = Buffer.from(base64Data, 'base64');
+    const filename = id + '.' + mimeType.split('/')[1];
+    
+    const filePath = `./uploads/${ filename }`;
+
+    fs.writeFileSync(filePath, buffer);
+
+    const announcementDate = getFormattedDateTime();
+
+    const response = await announcementApi.addAnnouncement({
+        id,
+        title,
+        description,
+        filePath: filePath.substring(1),
+        announcementDate
+    });
+
+    const returnResponse = {};
+
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Announcement added successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+});
+
+app.put('/get-announcement', async (req, res) => {
+    const { id } = req.body;
+    const response = await announcementApi.getAnnouncementById(id);
+    res.send(response);
+});
+
+app.delete('/remove-announcement', async (req, res) => {
+    const { id } = req.body;
+    const response = await announcementApi.removeAnnouncement(id);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Announcement deleted successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+});
+
+app.get('/uploads/:fileName', (req, res) => {
+    const fileName = req.params.fileName;
+    const imagePath = path.join(__dirname, '../uploads', fileName);
+
+    const uploadsDir = path.join(__dirname, '../uploads');
+
+    fs.readdir(uploadsDir, (err, files) => {
+        if (err) {
+          console.error('Error reading the directory:', err);
+        } else {
+          console.log('Contents of uploads directory:', files);
+        }
+    })
+
+    res.sendFile(imagePath, (err) => {
+        if (err) {
+            console.log('err: ', err);
+            res.send('Error sending image');
+        }
+    });
 });
 
 function generateUniqueId(prefix) {

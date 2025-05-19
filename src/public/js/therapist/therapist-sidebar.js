@@ -10,6 +10,9 @@ document.getElementById('therapist-patients').onclick = () => {
 document.getElementById('therapist-activities').onclick = () => {
     window.location.href = '/therapist/activities';
 }
+document.getElementById('therapist-announcements').onclick = () => {
+    window.location.href = '/therapist/announcements';
+}
 document.getElementById('therapist-chats').onclick = () => {
     window.location.href = '/therapist/chats';
 }
