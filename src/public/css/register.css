@@ -70,6 +70,10 @@
     box-sizing: border-box;
     background-color: #fff;
 }
+
+.wrong-password {
+    border: 2px solid #bb2121 !important;
+}
   
 .input-container label {
     position: absolute;
@@ -80,6 +84,8 @@
     font-size: 16px;
     pointer-events: none;
     transition: 0.3s ease all;
+    background-color: #fff;
+    padding: 5px;
 }
   
 .input-container input:focus {
@@ -128,6 +134,32 @@
     background-color: #4b8127;
     color: #fff;
     transition: all 0.3s ease;
+}
+
+.input-container select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #575757;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: #fff;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+.input-container select:focus {
+    border-color: #4b8127;
+    outline: none;
+}
+
+.input-container select:focus + label,
+.input-container select:not([value=""]) + label {
+    top: 0;
+    font-size: 13px;
+    color: #4b8127;
 }
 
 

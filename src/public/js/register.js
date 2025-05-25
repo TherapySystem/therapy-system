@@ -1,9 +1,37 @@
 const submitRegistration = document.getElementById('submit-registration');
+const confirmPassword = document.getElementById('confirmPassword');
+const realPassword = document.getElementById('password');
+let validPassword = false;
+
+realPassword.addEventListener('input', (event) => {
+    const confirmValue = confirmPassword.value;
+    const input = event.target.value;
+
+    validPassword = confirmValue == input;
+    if (!validPassword) {
+        confirmPassword.classList.add('wrong-password');
+    } else {
+        confirmPassword.classList.remove('wrong-password');
+    }
+});
+confirmPassword.addEventListener('input', (event) => {
+    const password = document.getElementById('password').value;
+    const input = event.target.value;
+
+    validPassword = password == input;
+    if (!validPassword) {
+        confirmPassword.classList.add('wrong-password');
+    } else {
+        confirmPassword.classList.remove('wrong-password');
+    }
+});
+
 submitRegistration.addEventListener('click', async () => {
     const firstNameChild = document.getElementById('firstNameChild').value;
     const lastNameChild = document.getElementById('lastNameChild').value;
     const middleNameChild = document.getElementById('middleNameChild').value;
     const birthDateChild = document.getElementById('birthDateChild').value;
+    const gender = document.getElementById('gender').value;
     
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -17,7 +45,7 @@ submitRegistration.addEventListener('click', async () => {
 
     const terms = document.getElementById('terms').checked;
 
-    if (firstNameChild && lastNameChild && middleNameChild && birthDateChild && username && password && firstName && lastName && middleName && birthDate && email && mobileNumber && address) {
+    if (validPassword && firstNameChild && lastNameChild && middleNameChild && birthDateChild && username && password && firstName && lastName && middleName && birthDate && gender && email && mobileNumber && address) {
         if (!terms) {
             showErrorNotification("Please agree to the terms and conditions");
             return;
@@ -32,6 +60,7 @@ submitRegistration.addEventListener('click', async () => {
                 childLastName: lastNameChild,
                 childMiddleName: middleNameChild,
                 childBirthDate: birthDateChild,
+                childGender: gender,
                 parentUsername: username,
                 parentPassword: password,
                 parentFirstName: firstName,
