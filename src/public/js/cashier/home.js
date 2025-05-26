@@ -114,6 +114,7 @@ const loadFunctions = async () => {
 
 const setBillingFunction = async (billingId, isApprove) => {
     showLoadingScreen("Adding new billing...");
+    const validSession = document.getElementById(`validSession_${ billingId }`).value;
     const fetchSetBilling = await fetch('/billing-status', {
         method: 'POST',
         credentials: "include",
@@ -122,7 +123,8 @@ const setBillingFunction = async (billingId, isApprove) => {
         },
         body: JSON.stringify({
             billingId,
-            status: isApprove ? 'Approved' : 'Declined'
+            status: isApprove ? 'Approved' : 'Declined',
+            validSession: isApprove ? validSession : 0
         })
     });
 
@@ -154,7 +156,9 @@ const loadTable = async () => {
             <td>₱ ${ billing.amount }</td>
             <td>${ billing.paymentDate }</td>
             <td ${ billing.billingType == 'Online Transfer' ? `id="paymentType-${billing.id}"` : '' } class="billing-type">${ billing.billingType == 'Online Transfer' ? billing.walletType : billing.billingType }</td>
-            <td>${ billing.validSession ? billing.validSession + " session/s" : "N/A" }</td>
+            <td id='status_${ billing.id }'>${ billing.status == 'Pending' 
+                ? `<input id='validSession_${ billing.id }' type='number' min=0 value=1>`
+                : billing.validSession ? billing.validSession + " session/s" : "N/A"}</td>
             <td>${ billing.walletType ? billing.referenceCode : 'N/A' }</td>
             <td>${ 
                 billing.status == 'Approved' ? 'Approved' : 
@@ -217,15 +221,19 @@ const loadTable = async () => {
             const approveBilling = document.getElementById(`approve-billing-${ billing.id }`);
             const declineBilling = document.getElementById(`decline-billing-${ billing.id }`);
             const actionBilling = document.getElementById(`action-${ billing.id }`);
+            const statusBilling = document.getElementById(`status_${ billing.id }`);
+            const validSessionValue = document.getElementById(`validSession_${ billing.id }`).value;
             
             approveBilling.addEventListener('click', async () => {
                 await setBillingFunction(billing.id, true);
                 actionBilling.innerHTML = 'Approved';
+                statusBilling.innerHTML = validSessionValue;
             });
 
             declineBilling.addEventListener('click', async () => {
                 await setBillingFunction(billing.id, false);
                 actionBilling.innerHTML = 'Declined';
+                statusBilling.innerHTML = 'N/A';
             });
         }
 

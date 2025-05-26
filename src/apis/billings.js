@@ -46,10 +46,11 @@ const getAllBillingAmount = async () => {
     return totalAmount;
 };
 
-const setBillingStatus = async (billingId, status) => {
+const setBillingStatus = async (billingId, status, validSession) => {
     try {
         await db.ref(billingNode).child(billingId).update({
-            status: status
+            status: status,
+            validSession: validSession
         });
         return true;
     } catch (error) {

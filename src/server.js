@@ -590,12 +590,12 @@ app.post('/submit-payment', async (req, res) => {
 });
 
 app.post('/billing-status', async (req, res) => {
-    const { billingId, status } = req.body;
+    const { billingId, status, validSession } = req.body;
 
     const returnResponse = {};
     
     if (status == 'Approved' || status == 'Declined') {
-        const response = await billingApi.setBillingStatus(billingId, status);
+        const response = await billingApi.setBillingStatus(billingId, status, validSession);
     
         if (response) {
             returnResponse.status = 'success';
