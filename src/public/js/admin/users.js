@@ -115,7 +115,7 @@ const loadTable = async () => {
 
     tbody.innerHTML = '';
 
-    for(var i = 0; i < allUsers.length; i++) {
+    for(var i = allUsers.length - 1; i >= 0; i--) {
         const user = allUsers[i];
         const template = `<tr id="user-${ user.id }">
             <td id="users-id">${ user.id }</td>

@@ -19,7 +19,7 @@ const loadTable = async () => {
 
     tbody.innerHTML = '';
 
-    for (var i = 0; i < allPatients.length; i++) {
+    for (var i = allPatients.length - 1; i >= 0 ; i--) {
         const patient = allPatients[i];
         const template = `
         <tr id="patient-${ patient.id }">

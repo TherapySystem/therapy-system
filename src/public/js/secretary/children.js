@@ -47,7 +47,7 @@ const loadTable = async () => {
 
     tbody.innerHTML = '';
 
-    for (var i = 0; i < allChildren.length; i++) {
+    for (var i = allChildren.length - 1; i >= 0; i--) {
         const child = allChildren[i];
         const template = `
             <tr id="child-${ child.id }">
