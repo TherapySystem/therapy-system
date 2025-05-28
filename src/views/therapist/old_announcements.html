@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="/css/utilities.css">
     <link rel="stylesheet" href="/css/therapist/general.css">
     <link rel="stylesheet" href="/css/therapist/sidebar.css">
-    <link rel="stylesheet" href="/css/therapist/activities.css">
-    <title>Therapist - Children</title>
+    <link rel="stylesheet" href="/css/therapist/announcement.css">
+    <title>Therapist - Announcements</title>
 
     <style>
         th {
@@ -46,9 +46,15 @@
                 </svg>
                 <h4>Chats</h4>
             </div>
-            <div id="therapist-activities" class="menu-item active-menu-item">
+            <div id="therapist-activities" class="menu-item">
                 <svg width="100%" height="100%" viewBox="0 0 1024 1024" fill="#000000" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M790.811 120.124h-56.047V64.133h-55.99v55.99H342.837v-55.99h-55.989v55.99h-56.047c-61.556 0-111.921 50.366-111.921 111.92v616.004c0 61.555 50.364 111.919 111.92 111.919h560.011c61.556 0 111.921-50.364 111.921-111.92V232.044c0-61.554-50.365-111.92-111.921-111.92z m-560.01 55.99h56.047v55.987h55.99v-55.987h335.936v55.987h55.99v-55.987h56.047c30.841 0 55.932 25.09 55.932 55.93V344.08H174.869V232.043c0-30.84 25.09-55.929 55.932-55.929z m560.01 727.862h-560.01c-30.842 0-55.932-25.09-55.932-55.93V400.07h671.873v447.978c0 30.839-25.09 55.928-55.931 55.928z" fill="" /><path d="M286.848 512.048h447.916v55.99H286.848v-55.99zM286.848 681.766h447.916v55.99H286.848v-55.99z" fill="" /></svg>
                 <h4>Activities</h4>
+            </div>
+            <div id="therapist-announcements" class="menu-item active-menu-item">
+                <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="none" d="M4 13.9999L5.57465 20.2985C5.61893 20.4756 5.64107 20.5642 5.66727 20.6415C5.92317 21.397 6.60352 21.9282 7.39852 21.9933C7.4799 21.9999 7.5712 21.9999 7.75379 21.9999C7.98244 21.9999 8.09677 21.9999 8.19308 21.9906C9.145 21.8982 9.89834 21.1449 9.99066 20.193C10 20.0967 10 19.9823 10 19.7537V5.49991M18.5 13.4999C20.433 13.4999 22 11.9329 22 9.99991C22 8.06691 20.433 6.49991 18.5 6.49991M10.25 5.49991H6.5C4.01472 5.49991 2 7.51463 2 9.99991C2 12.4852 4.01472 14.4999 6.5 14.4999H10.25C12.0164 14.4999 14.1772 15.4468 15.8443 16.3556C16.8168 16.8857 17.3031 17.1508 17.6216 17.1118C17.9169 17.0756 18.1402 16.943 18.3133 16.701C18.5 16.4401 18.5 15.9179 18.5 14.8736V5.1262C18.5 4.08191 18.5 3.55976 18.3133 3.2988C18.1402 3.05681 17.9169 2.92421 17.6216 2.88804C17.3031 2.84903 16.8168 3.11411 15.8443 3.64427C14.1772 4.55302 12.0164 5.49991 10.25 5.49991Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <h4>Announcements</h4>
             </div>
             <div id="therapist-logout" class="menu-item">
                 <svg width="100%" height="100%" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -62,25 +68,58 @@
     <div class="main-section">
         <div class="header-section">
             <h2>Welcome!</h2>
-            <h4>Manage Activities</h4>
+            <h4>Manage Announcements</h4>
         </div>
         <div class="content-section">
             <div class="headbar">
                 <input id="search-input" type="text" placeholder="Search" class="search-input">
                 <button id="search-button" class="search-button">Search</button>
+                <div class="action">
+                    <svg id="new-announcement" width="100%" height="100%" viewBox="0 0 32 32" xml:space="preserve">
+                        <path fill="#fff" class="dashing_een" d="M24.256,7.536l-1.848,0.765c-0.255,0.106-0.548-0.015-0.653-0.271s0.015-0.548,0.271-0.653l1.848-0.765
+                            c0.255-0.106,0.548,0.015,0.653,0.271C24.632,7.138,24.511,7.43,24.256,7.536z M29.146,4.969c-0.106-0.255-0.398-0.376-0.653-0.271
+                            l-1.848,0.765c-0.255,0.106-0.376,0.398-0.271,0.653c0.106,0.255,0.398,0.376,0.653,0.271l1.848-0.765
+                            C29.131,5.517,29.252,5.225,29.146,4.969z M25,16.5c0-0.276-0.224-0.5-0.5-0.5h-2c-0.276,0-0.5,0.224-0.5,0.5s0.224,0.5,0.5,0.5h2
+                            C24.776,17,25,16.776,25,16.5z M30,16.5c0-0.276-0.224-0.5-0.5-0.5h-2c-0.276,0-0.5,0.224-0.5,0.5s0.224,0.5,0.5,0.5h2
+                            C29.776,17,30,16.776,30,16.5z M24.256,24.464l-1.848-0.765c-0.255-0.106-0.548,0.015-0.653,0.271
+                            c-0.106,0.255,0.015,0.548,0.271,0.653l1.848,0.765c0.255,0.106,0.548-0.015,0.653-0.271C24.632,24.862,24.511,24.57,24.256,24.464z
+                            M28.875,26.377l-1.848-0.765c-0.255-0.106-0.548,0.015-0.653,0.271c-0.106,0.255,0.015,0.548,0.271,0.653l1.848,0.765
+                            c0.255,0.106,0.548-0.015,0.653-0.271C29.252,26.775,29.131,26.483,28.875,26.377z M19.775,6.083
+                            c-0.141-0.092-0.318-0.108-0.472-0.042L5.397,12H1.5C1.224,12,1,12.224,1,12.5v7C1,19.776,1.224,20,1.5,20h3.897l13.906,5.959
+                            c0.154,0.066,0.332,0.05,0.472-0.042C19.916,25.825,20,25.668,20,25.5v-19C20,6.332,19.916,6.175,19.775,6.083z M5.697,19.041
+                            C5.635,19.014,5.568,19,5.5,19H2v-6h3.5c0.068,0,0.135-0.014,0.197-0.041L19,7.258v17.483L5.697,19.041z"/>
+                    </svg>
+                </div>
             </div>
             <div class="table-section">
-                <table id="activity-table" class="children-table">
+                <table id="announcement-table" class="children-table">
                     <thead>
                         <tr>
-                            <th onclick="sortTable(0)" >Parent</th>
-                            <th onclick="sortTable(1)" >Child</th>
-                            <th onclick="sortTable(2)" >Availed Service</th>
-                            <th onclick="sortTable(3)" >Activity Date</th>
+                            <th>Announcement Image</th>
+                            <th>Announcement Title</th>
+                            <th>Announcement Content</th>
+                            <th>Announcement Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
+                            <!-- <tr>
+                                <td>
+                                    <img src="/uploads/T20250519-095908-680835.png" alt="" style="width: auto; height: 200px;">
+                                </td>
+                                <td>
+                                    <h3>Sample Title</h3>
+                                </td>
+                                <td>
+                                    Announcement Contents
+                                </td>
+                                <td>
+                                    Announcement Date
+                                </td>
+                                <td>
+                                    <button class="delete-button">Remove</button>
+                                </td>
+                            </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -89,51 +128,34 @@
 
     <div id="modal" class="modal">
         <div class="modal-content">
-            
-        </div>
-    </div>
+            <span class="close">&times;</span>
+            <h3>New Announcement</h3>
 
-    <div id="activitiesModal" class="modal">
-        <div id="modal-content-activities" class="modal-content">
-            
+            <div class="input-container">
+            <input type="file" id="image" name="image" accept="image/*">
+                <label for="image">Announcement Cover</label>
+            </div>
+
+            <div class="input-container" style="margin-bottom: 20px;">
+                <input type="text" id="title" name="title" placeholder=" ">
+                <label for="title">Title</label>
+            </div>
+                
+            <label>Description</label>
+            <div class="input-container" style="margin-top: 0;">
+                <textarea id="description" name="description" placeholder=" " rows="8" style="width: 80%; font-family: Arial, Helvetica, sans-serif; padding: 10px"></textarea>
+            </div>
+
+            <button id="confirm-button">Confirm</button>
         </div>
     </div>
 
     <script>
-        let sortDirection = [true, true, true, true, true, true, true, true];
-
-        function sortTable(columnIndex) {
-            let table = document.getElementById("activity-table");
-            let rows = Array.from(table.rows).slice(1);
-            let isAscending = sortDirection[columnIndex];
-
-            rows.sort((rowA, rowB) => {
-                let cellA = rowA.cells[columnIndex].innerText.trim();
-                let cellB = rowB.cells[columnIndex].innerText.trim();
-
-                if (columnIndex === 4) {
-                    let numA = parseFloat(cellA.replace(/[^\d.-]/g, ''));
-                    let numB = parseFloat(cellB.replace(/[^\d.-]/g, ''));
-                    return isAscending ? numA - numB : numB - numA;
-                }
-
-                if (columnIndex === 3) {
-                    let dateA = new Date(cellA);
-                    let dateB = new Date(cellB);
-                    return isAscending ? dateA - dateB : dateB - dateA;
-                }
-
-                return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
-            });
-
-            sortDirection[columnIndex] = !isAscending;
-
-            rows.forEach(row => table.appendChild(row));
-        }
+        
     </script>
 
     <script src="/js/utilities.js"></script>
-    <script src="/js/therapist/activities.js"></script>
-    <script src="/js/therapist/therapist-sidebar.js"></script>
+    <script src="/js/admin/announcements.js"></script>
+    <script src="/js/admin/therapist-sidebar.js"></script>
 </body>
 </html>

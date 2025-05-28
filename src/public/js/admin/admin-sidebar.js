@@ -25,6 +25,9 @@ document.getElementById('admin-menu-payroll').onclick = () => {
 document.getElementById('admin-menu-reports').onclick = () => {
     window.location.href = '/admin/reports';
 }
+document.getElementById('admin-announcements').onclick = () => {
+    window.location.href = '/admin/announcements';
+}
 
 document.getElementById('admin-menu-logout').onclick = async () => {
     const response = await fetch('/logout', {

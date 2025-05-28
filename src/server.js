@@ -175,6 +175,10 @@ app.get('/admin/reports', verifyToken('admin'), async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/admin/reports.html'));
 })
 
+app.get('/admin/announcements', verifyToken('admin'), async (req, res) => {
+    res.sendFile(path.join(publicPath, '../views/admin/announcements.html'));
+});
+
 // CASHIER
 app.get('/cashier', verifyToken('cashier'), async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/cashier/home.html'));
@@ -225,10 +229,6 @@ app.get('/therapist/chats', verifyToken('therapist'), async (req, res) => {
 
 app.get('/therapist/activities', verifyToken('therapist'), async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/therapist/activities.html'));
-});
-
-app.get('/therapist/announcements', verifyToken('therapist'), async (req, res) => {
-    res.sendFile(path.join(publicPath, '../views/therapist/announcements.html'));
 });
 
 // Application
