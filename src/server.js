@@ -475,13 +475,15 @@ app.get('/get-reports', async (req, res) => {
 
     const billingAmount = await billingApi.getAllBillingAmount();
 
-    res.send({
+    const returnObj = {
         totalAccounts: accounts.length,
         totalTherapists: therapists.length,
         totalChildren: children.length,
         totalEnrollees: enrollees.length,
-        totalBillingAmount: billingAmount
-    });
+        totalBillingAmount: billingAmount,
+    };
+
+    res.send(returnObj);
 });
 
 app.get('/get-chart-reports', async (req, res) => {
@@ -492,6 +494,95 @@ app.get('/get-chart-reports', async (req, res) => {
     }
 
     res.send(response);
+});
+
+app.put('/get-summary-report', async (req, res) => {
+
+    const { fromDate, toDate } = req.body;
+
+    const children = await childrenApi.getAllChildren();
+    const enrollees = await enrollApi.getAllEnrollees();
+    const billingAmount = await billingApi.getAllBillingAmount();
+    const servicesByGender = await childrenApi.getServiceEnrolleesByGender(fromDate, toDate);
+
+    const fromDateOrig = fromDate;
+    const toDateOrig = toDate;
+
+    const isDateInRange = (targetDateStr) => {
+        const fromDateStr = fromDateOrig;
+        const toDateStr = toDateOrig;
+
+        const monthMap = {
+            Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+            Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+        };
+
+        const [fromMonthStr, fromYearStr] = fromDateStr.split(' ');
+        const [toMonthStr, toYearStr] = toDateStr.split(' ');
+
+        const fromDate = new Date(parseInt(fromYearStr), monthMap[fromMonthStr], 1);
+        const toDate = new Date(parseInt(toYearStr), monthMap[toMonthStr] + 1, 0);
+
+        const year = parseInt(targetDateStr.slice(0, 4));
+        const month = parseInt(targetDateStr.slice(4, 6)) - 1;
+        const day = parseInt(targetDateStr.slice(6, 8));
+        const targetDate = new Date(year, month, day);
+
+        return targetDate >= fromDate && targetDate <= toDate;
+    }
+
+    const summaryReport = {
+        enrolledMale: 0,
+        enrolledFemale: 0,
+        pendingMale: 0,
+        pendingFemale: 0,
+        speechMale: servicesByGender['Speech Therapy']['male'],
+        speechFemale:  servicesByGender['Speech Therapy']['female'],
+        occupationalMale: servicesByGender['Occupational Therapy']['male'],
+        occupationalFemale: servicesByGender['Occupational Therapy']['female'],
+        developmentalMale: servicesByGender['Developmental Class']['male'],
+        developmentalFemale: servicesByGender['Developmental Class']['female'],
+        shadowMale: servicesByGender['Shadow Class']['male'],
+        shadowFemale: servicesByGender['Shadow Class']['female'],
+        totalSales: billingAmount
+    }
+
+    for (let i = 0; i < children.length; i++) {
+        const child = children[i];
+
+        const firstIdPart = child.id.split("-")[0];
+        const date = firstIdPart.substring(1);
+
+        if (!isDateInRange(date)) {
+            continue;
+        }
+
+        if (child.childGender == 'male') {
+            summaryReport.enrolledMale++;
+        } else if (child.childGender == 'female') {
+            summaryReport.enrolledFemale++;
+        }
+    }
+
+    for (let i = 0; i < enrollees.length; i++) {
+        const enrollee = enrollees[i];
+
+        const firstIdPart = enrollee.id.split("-")[0];
+        const date = firstIdPart.substring(1);
+
+        if (!isDateInRange(date)) {
+            continue;
+        }
+
+        if (enrollee.childGender == 'male') {
+            summaryReport.pendingMale++;
+        } else if (enrollee.childGender == 'female') {
+            summaryReport.pendingFemale++;
+        }
+
+    }
+
+    res.send({summaryReport});
 });
 
 // Cashier

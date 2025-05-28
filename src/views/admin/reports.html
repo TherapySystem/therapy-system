@@ -10,41 +10,9 @@
     <link rel="stylesheet" href="/css/admin/reports.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-    <style>
-        @media print {
-            body * {
-                visibility: hidden;  /* Hide everything else */
-            }
-    
-            .main-section, .main-section * {
-                visibility: visible;  /* Make only .main-section visible */
-            }
-    
-            .main-section {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-
-            #generatePDF {
-                visibility: hidden;
-            }
-
-            .canvases {
-                display: flex;
-                flex-wrap: wrap;
-                flex-flow: column;
-                width: 100%;
-            }
-
-            .canvases > canvas {
-                width: 700px !important;
-                height: 350px!important;
-            }
-        }
-    </style>
     <title>Admin - Children</title>
+    <style>
+    </style>
 </head>
 <body>
     <div class="sidebar">
@@ -101,7 +69,7 @@
             <h2>Reports</h2>
 
             <div class="option">
-                <button id="generatePDF">Generate PDF File</button>
+                <button id="generatePDF">Generate Reports</button>
             </div>
 
             <div class="report-headers">
@@ -112,11 +80,387 @@
                 <canvas id="servicesChart"></canvas>
             </div>
         </div>
+        
+        <div id="print-section" class="print-section print-section-margin" style="display: none;">
+            <div class="print-header">
+                <img src="/images/logo.png" alt="Thera-able Occupational Therapy Centre">
+                <div class="print-header-info">
+                    <h2>Thera-able Occupational Therapy Centre</h2>
+                    <h3>Waka Building A57 Techno Park, Brgy. Don Martin Marunduan, Mati, Philippines</h3>
+                </div>
+            </div>
+            <div class="print-summary">
+                <h3>Reports Summary</h3>
+                <h4 id="summary-date" class="summary-date">From January to May 2025</h4>
+                <div class="report-table">
+
+                    <span id="report-enrollee-header">
+                        <div class="header-with-gender">
+                            <div class="category-header">
+                                <h4>Enrollees Summary</h4>
+                            </div>
+                            <div class="count-header">
+                                <div class="count-title">
+                                    <h4>Count</h4>
+                                </div>
+                                <div class="gender-header">
+                                    <div class="male-header">
+                                        <h4>Male</h4>
+                                    </div>
+                                    <div class="female-header">
+                                        <h4>Female</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+
+                    <span id="report-enrollee">
+                        <div class="data-with-gender">
+                            <div class="data-title">
+                                <h5>Enrolled Children</h5>
+                            </div>
+                            <div class="data-gender-count">
+                                <div class="count">
+                                    <h5 id="enrolled-male">5 enrollees</h5>
+                                </div>
+                                <div class="count">
+                                    <h5 id="enrolled-female">10 enrollees</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+
+                    <span id="rejected-enrollee">
+                        <div class="data-with-gender">
+                            <div class="data-title">
+                                <h5>Pending Enrollees</h5>
+                            </div>
+                            <div class="data-gender-count">
+                                <div class="count">
+                                    <h5 id="rejected-male">5 enrollees</h5>
+                                </div>
+                                <div class="count">
+                                    <h5 id="rejected-female">10 enrollees</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+
+                    <span id="report-services-header">
+                        <div class="header-with-gender">
+                            <div class="category-header">
+                                <h4>Availed Services by Gender</h4>
+                            </div>
+                            <div class="count-header">
+                                <div class="count-title">
+                                    <h4>Count</h4>
+                                </div>
+                                <div class="gender-header">
+                                    <div class="male-header">
+                                        <h4>Male</h4>
+                                    </div>
+                                    <div class="female-header">
+                                        <h4>Female</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="data-with-gender">
+                            <div class="data-title">
+                                <h5>Speech Therapy</h5>
+                            </div>
+                            <div class="data-gender-count">
+                                <div class="count">
+                                    <h5 id="speech-male">5 children/s</h5>
+                                </div>
+                                <div class="count">
+                                    <h5 id="speech-female">10 children/s</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="data-with-gender">
+                            <div class="data-title">
+                                <h5>Occupational Therapy</h5>
+                            </div>
+                            <div class="data-gender-count">
+                                <div class="count">
+                                    <h5 id="occupational-male">5 children/s</h5>
+                                </div>
+                                <div class="count">
+                                    <h5 id="occupational-female">10 children/s</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="data-with-gender">
+                            <div class="data-title">
+                                <h5>Developmental Class</h5>
+                            </div>
+                            <div class="data-gender-count">
+                                <div class="count">
+                                    <h5 id="developmental-male">5 children/s</h5>
+                                </div>
+                                <div class="count">
+                                    <h5 id="developmental-female">10 children/s</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="data-with-gender">
+                            <div class="data-title">
+                                <h5>Shadow Class</h5>
+                            </div>
+                            <div class="data-gender-count">
+                                <div class="count">
+                                    <h5 id="shadow-male">5 children/s</h5>
+                                </div>
+                                <div class="count">
+                                    <h5 id="shadow-female">10 children/s</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+
+                    <span id="report-sales">
+                        <div class="header-only">
+                            <h4>Sales Report</h4>
+                        </div>
+                        <div class="data-and-count">
+                            <div class="data-title">
+                                <h5>Total Billing Sales</h5>
+                            </div>
+                            <div class="count">
+                                <h5 id="total-sales">10, 000</h5>
+                            </div>
+                        </div>
+                    </span>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal" class="close">&times;</span>
+            <h3>Generate Report</h3>
+            <h4>Select Content</h4>
+            <div class="check-choices">
+                <div class="input-container" style="margin-right: 10px;">
+                    <input type="checkbox" id="cb_Enrollees" name="Enrollees" placeholder=" " checked>
+                    <label for="Enrollees">Enrollees</label>
+                </div>
+                <div class="input-container" style="margin-right: 10px;">
+                    <input type="checkbox" id="cb_RejectedEnrollees" name="RejectedEnrollees" placeholder=" " checked>
+                    <label for="RejectedEnrollees">Pending Enrollees</label>
+                </div>
+                <div class="input-container" style="margin-right: 10px;">
+                    <input type="checkbox" id="cb_ServicesGender" name="ServicesGender" placeholder=" " checked>
+                    <label for="ServicesGender">Services availed by gender</label>
+                </div>
+                <div class="input-container" style="margin-right: 10px;">
+                    <input type="checkbox" id="cb_Sales" name="Sales" placeholder=" " checked>
+                    <label for="Sales">Sales</label>
+                </div>
+            </div>
+            <h4>Select Month</h4>
+            <div class="input-container">
+                <label for="fromMonth">From: </label>
+                <select id="fromMonth" name="fromMonth">
+                    <option value="Jan">Jan</option>
+                    <option value="Feb">Feb</option>
+                    <option value="Mar">Mar</option>
+                    <option value="Apr">Apr</option>
+                    <option value="May">May</option>
+                    <option value="Jun">Jun</option>
+                    <option value="Jul">Jul</option>
+                    <option value="Aug">Aug</option>
+                    <option value="Sep">Sep</option>
+                    <option value="Oct">Oct</option>
+                    <option value="Nov">Nov</option>
+                    <option value="Dec">Dec</option>
+                </select>
+                <select id="yearFrom">
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                    <option value="2029">2029</option>
+                    <option value="2030">2030</option>
+                </select>
+            </div>
+            <div class="input-container">
+                <label for="toMonth">To: </label>
+                <select id="toMonth" name="toMonth">
+                    <option value="Jan">Jan</option>
+                    <option value="Feb">Feb</option>
+                    <option value="Mar">Mar</option>
+                    <option value="Apr">Apr</option>
+                    <option value="May">May</option>
+                    <option value="Jun">Jun</option>
+                    <option value="Jul">Jul</option>
+                    <option value="Aug">Aug</option>
+                    <option value="Sep">Sep</option>
+                    <option value="Oct">Oct</option>
+                    <option value="Nov">Nov</option>
+                    <option value="Dec">Dec</option>
+                </select>
+                <select id="yearTo">
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                    <option value="2029">2029</option>
+                    <option value="2030">2030</option>
+                </select>
+            </div>
+            <button id="confirm-button" style="margin-top: 20px;">Generate Report</button>
+        </div>
     </div>
 
     <script>
-        document.getElementById('generatePDF').addEventListener('click', function() {
+        const modalWindow = document.getElementById('modal');
+        const closeModal = document.getElementById('close-modal');
+        const confirmButton = document.getElementById('confirm-button');
+
+        const setupReport = async () => {
+            // All holders
+            showLoadingScreen("Generating reports...");
+            const summaryDate = document.getElementById('summary-date');
+
+            const enrolleeHeader = document.getElementById('report-enrollee-header');
+
+            const reportEnrollee = document.getElementById('report-enrollee');
+            const enrolledMale = document.getElementById('enrolled-male');
+            const enrolledFemale = document.getElementById('enrolled-female');
+
+            const rejectedEnrollee = document.getElementById('rejected-enrollee');
+            const rejectedMale = document.getElementById('rejected-male');
+            const rejectedFemale = document.getElementById('rejected-female');
+
+            const reportServicesHeader = document.getElementById('report-services-header');
+
+            const speechMale = document.getElementById('speech-male');
+            const speechFemale = document.getElementById('speech-female');
+
+            const occupationalMale = document.getElementById('occupational-male');
+            const occupationalFemale = document.getElementById('occupational-female');
+
+            const developmentalMale = document.getElementById('developmental-male');
+            const developmentalFemale = document.getElementById('developmental-female');
+
+            const shadowMale = document.getElementById('shadow-male');
+            const shadowFemale = document.getElementById('shadow-female');
+
+            const reportSales = document.getElementById('report-sales');
+            const totalSales = document.getElementById('total-sales');
+
+            // hide displays
+            enrolleeHeader.style.display = 'none';
+            reportEnrollee.style.display = 'none';
+            rejectedEnrollee.style.display = 'none';
+
+            reportServicesHeader.style.display = 'none';
+
+            reportSales.style.display = 'none';
+
+            // Checkboxes
+            const cb_enrollees = document.getElementById('cb_Enrollees').checked;
+            const cb_rejectedEnrollees = document.getElementById('cb_RejectedEnrollees').checked;
+            const cb_servicesGender = document.getElementById('cb_ServicesGender').checked;
+            const cb_sales = document.getElementById('cb_Sales').checked;
+
+            // display base on checkbox
+            if (cb_enrollees) {
+                enrolleeHeader.style.display = 'block';
+                reportEnrollee.style.display = 'block';
+            }
+
+            if (cb_rejectedEnrollees) {
+                enrolleeHeader.style.display = 'block';
+                rejectedEnrollee.style.display = 'block';
+            }
+
+            if (cb_servicesGender) {
+                reportServicesHeader.style.display = 'block';
+            }
+
+            if (cb_sales) {
+                reportSales.style.display = 'block';
+            }
+            
+            const fromMonth = document.getElementById('fromMonth').value;
+            const fromYear = document.getElementById('yearFrom').value;
+            const toMonth = document.getElementById('toMonth').value;
+            const toYear = document.getElementById('yearTo').value;
+
+            const fetchReports = await fetch('/get-summary-report', {
+                method: 'PUT',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    fromDate: `${ fromMonth } ${ fromYear }`,
+                    toDate: `${ toMonth } ${ toYear }`
+                })
+            });
+
+            const summaryReports = await fetchReports.json();
+            const summaryReport = summaryReports.summaryReport;
+
+            const dateRange = `From ${ fromMonth } ${ fromYear } to ${ toMonth } ${ toYear }`;
+
+            document.getElementById('summary-date').innerText = dateRange;
+
+            document.getElementById('enrolled-male').innerText = summaryReport.enrolledMale + ' children/s';
+            document.getElementById('enrolled-female').innerText = summaryReport.enrolledFemale + ' children/s';
+
+            document.getElementById('rejected-male').innerText = summaryReport.pendingMale + ' children/s';
+            document.getElementById('rejected-female').innerText = summaryReport.pendingFemale + ' children/s';
+
+            document.getElementById('speech-male').innerText = summaryReport.speechMale + ' children/s';
+            document.getElementById('speech-female').innerText = summaryReport.speechFemale + ' children/s';
+
+            document.getElementById('occupational-male').innerText = summaryReport.occupationalMale + ' children/s';
+            document.getElementById('occupational-female').innerText = summaryReport.occupationalFemale + ' children/s';
+
+            document.getElementById('developmental-male').innerText = summaryReport.developmentalMale + ' children/s';
+            document.getElementById('developmental-female').innerText = summaryReport.developmentalFemale + ' children/s';
+
+            document.getElementById('shadow-male').innerText = summaryReport.shadowMale + ' children/s';
+            document.getElementById('shadow-female').innerText = summaryReport.shadowFemale + ' children/s';
+
+            document.getElementById('total-sales').innerText = `₱ ${ summaryReport.totalSales }`;
+
+        }
+
+        confirmButton.addEventListener('click', async () => {
+            await setupReport();
+
+            const printSection = document.getElementById('print-section');
+
+            printSection.classList.remove('print-section-margin');
+
+            const printContents = printSection.innerHTML;
+            const originalContents = document.body.innerHTML;
+
+            document.body.classList.add('print-section');
+            document.body.innerHTML = printContents;
             window.print();
+            document.body.classList.remove('print-section');
+            document.body.innerHTML = originalContents;
+            location.reload();
+        });
+
+        document.getElementById('generatePDF').addEventListener('click', function() {
+            // window.print();
+            modalWindow.style.display = 'block';
+        });
+
+        closeModal.addEventListener('click', () => {
+            modalWindow.style.display = 'none';
         });
     </script>
 

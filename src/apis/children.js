@@ -94,6 +94,72 @@ const getServiceEnrollees = async () => {
     return services;
 }
 
+const getServiceEnrolleesByGender = async (fromDateOrig, toDateOrig) => {
+    const allEnrollees = await getAllChildren();
+
+    const isDateInRange = (targetDateStr) => {
+        const fromDateStr = fromDateOrig;
+        const toDateStr = toDateOrig;
+
+        const monthMap = {
+            Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+            Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+        };
+
+        const [fromMonthStr, fromYearStr] = fromDateStr.split(' ');
+        const [toMonthStr, toYearStr] = toDateStr.split(' ');
+
+        const fromDate = new Date(parseInt(fromYearStr), monthMap[fromMonthStr], 1);
+        const toDate = new Date(parseInt(toYearStr), monthMap[toMonthStr] + 1, 0);
+
+        const year = parseInt(targetDateStr.slice(0, 4));
+        const month = parseInt(targetDateStr.slice(4, 6)) - 1;
+        const day = parseInt(targetDateStr.slice(6, 8));
+        const targetDate = new Date(year, month, day);
+
+        return targetDate >= fromDate && targetDate <= toDate;
+    }
+
+    // const services = [
+    //     {"service": "Occupational Therapy", "gender": { "Male": 0, "Female": 0 }},
+    //     {"service": "Shadow Class", "gender": { "Male": 0, "Female": 0 }},
+    //     {"service": "Speech Therapy", "gender": { "Male": 0, "Female": 0 }},
+    //     {"service": "Developmental Class", "gender": { "Male": 0, "Female": 0 }}
+    // ]
+
+    const services = {
+        "Occupational Therapy": {
+            "male": 0, "female": 0
+        },
+        "Shadow Class": {
+            "male": 0, "female": 0
+        },
+        "Speech Therapy": {
+            "male": 0, "female": 0
+        },
+        "Developmental Class": {
+            "male": 0, "female": 0
+        }
+    }
+
+    for (var i = 0; i < allEnrollees.length; i++) {
+        const enrollee = allEnrollees[i];
+
+        const firstIdPart = enrollee.id.split("-")[0];
+        const date = firstIdPart.substring(1);
+
+        if (!isDateInRange(date)) {
+            continue;
+        }
+
+        const enrolleeService = enrollee.service;
+        services[enrolleeService][enrollee.childGender] += 1;
+    }
+    
+    return services;
+
+}
+
 const getChildrenByTherapist = async (keyword, therapistId) => {
     const children = await getAllChildren(keyword); 
 
@@ -166,5 +232,6 @@ module.exports = {
     checkChildCredentials,
     
     getMonthlyEnrollees,
-    getServiceEnrollees
+    getServiceEnrollees,
+    getServiceEnrolleesByGender
 }

@@ -62,3 +62,181 @@
     background-color: #095f06;
     border: 2px solid #095f06;
 }
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 10px;
+}
+
+.modal-inner-content {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+.check-choices {
+    display: flex;
+    flex-direction: row;
+}
+
+#confirm-button {
+    margin-top: 10px;
+    background-color: #12a80d;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.print-section-margin {
+    margin-top: 500px;
+}
+
+.print-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.print-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.print-header img {
+    width: 150px;
+}
+
+.print-header-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.print-header-info h2, h3 {
+    margin: 0;
+}
+
+.print-summary {
+    display: flex;
+    flex-direction: column;
+    margin-inline: 20px;
+    padding: 20px;
+    border: 1px solid #000;
+}
+
+.report-table {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.report-table div {
+    border: 1px solid #000;
+}
+
+.header-with-gender {
+    display: flex;
+    flex-direction: row;
+}
+
+.header-with-gender h4 {
+    margin: 0;
+    padding: 0;
+}
+
+.header-with-gender > div {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.gender-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.gender-header > div {
+    width: 50%;
+}
+
+.data-with-gender {
+    display: flex;
+    flex-direction: row;
+}
+
+.data-with-gender > div {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+}
+
+.data-gender-count {
+    flex-direction: row;
+}
+
+.data-with-gender h5 {
+    margin: 0;
+    padding: 10px;
+    font-weight: normal;
+}
+
+.data-gender-count > div {
+    width: 50%;
+}
+
+.header-only {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.data-and-count {
+    display: flex;
+    flex-direction: row;
+}
+
+.data-and-count > div {
+    width: 50%;
+}
+
+.data-and-count h5 {
+    margin: 0;
+    padding: 10px;
+    font-weight: normal;
+}
