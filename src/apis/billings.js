@@ -9,6 +9,7 @@ const saveBilling = async (billingInfo) => {
         await db.ref(billingNode).child(billingInfo.id).set(billingInfo);
         return true;
     } catch (error) {
+        console.log(error);
         return false;
     }
 }

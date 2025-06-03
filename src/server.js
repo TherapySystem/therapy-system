@@ -662,7 +662,7 @@ app.post('/submit-payment', async (req, res) => {
         walletType,
         billingImage: filename,
         status: 'Pending',
-        validSession
+        validSession: validSession ? validSession : 0
     };
 
     const response = await billingApi.saveBilling(billingInfo);
