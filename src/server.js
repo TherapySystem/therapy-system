@@ -508,20 +508,32 @@ app.put('/get-summary-report', async (req, res) => {
     const fromDateOrig = fromDate;
     const toDateOrig = toDate;
 
+    // const isDateInRange = (targetDateStr) => {
+    //     const fromDateStr = fromDateOrig;
+    //     const toDateStr = toDateOrig;
+
+    //     const monthMap = {
+    //         Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+    //         Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+    //     };
+
+    //     const [fromMonthStr, fromYearStr] = fromDateStr.split(' ');
+    //     const [toMonthStr, toYearStr] = toDateStr.split(' ');
+
+    //     const fromDate = new Date(parseInt(fromYearStr), monthMap[fromMonthStr], 1);
+    //     const toDate = new Date(parseInt(toYearStr), monthMap[toMonthStr] + 1, 0);
+
+    //     const year = parseInt(targetDateStr.slice(0, 4));
+    //     const month = parseInt(targetDateStr.slice(4, 6)) - 1;
+    //     const day = parseInt(targetDateStr.slice(6, 8));
+    //     const targetDate = new Date(year, month, day);
+
+    //     return targetDate >= fromDate && targetDate <= toDate;
+    // }
+
     const isDateInRange = (targetDateStr) => {
-        const fromDateStr = fromDateOrig;
-        const toDateStr = toDateOrig;
-
-        const monthMap = {
-            Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
-            Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
-        };
-
-        const [fromMonthStr, fromYearStr] = fromDateStr.split(' ');
-        const [toMonthStr, toYearStr] = toDateStr.split(' ');
-
-        const fromDate = new Date(parseInt(fromYearStr), monthMap[fromMonthStr], 1);
-        const toDate = new Date(parseInt(toYearStr), monthMap[toMonthStr] + 1, 0);
+        const fromDate = new Date(fromDateOrig);
+        const toDate = new Date(toDateOrig);
 
         const year = parseInt(targetDateStr.slice(0, 4));
         const month = parseInt(targetDateStr.slice(4, 6)) - 1;
@@ -556,12 +568,16 @@ app.put('/get-summary-report', async (req, res) => {
         if (!isDateInRange(date)) {
             continue;
         }
-
-        if (child.childGender == 'male') {
+        console.log(child);
+        if (child.childGender == 'male' || child.childGender == 'Male') {
             summaryReport.enrolledMale++;
-        } else if (child.childGender == 'female') {
+        } else if (child.childGender == 'female' || child.childGender == 'Female') {
             summaryReport.enrolledFemale++;
         }
+        console.log({
+            male: summaryReport.enrolledMale,
+            female: summaryReport.enrolledFemale
+        });
     }
 
     for (let i = 0; i < enrollees.length; i++) {
@@ -574,9 +590,9 @@ app.put('/get-summary-report', async (req, res) => {
             continue;
         }
 
-        if (enrollee.childGender == 'male') {
+        if (enrollee.childGender == 'male' || child.childGender == 'Male') {
             summaryReport.pendingMale++;
-        } else if (enrollee.childGender == 'female') {
+        } else if (enrollee.childGender == 'female' || child.childGender == 'Female') {
             summaryReport.pendingFemale++;
         }
 

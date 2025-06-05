@@ -98,19 +98,8 @@ const getServiceEnrolleesByGender = async (fromDateOrig, toDateOrig) => {
     const allEnrollees = await getAllChildren();
 
     const isDateInRange = (targetDateStr) => {
-        const fromDateStr = fromDateOrig;
-        const toDateStr = toDateOrig;
-
-        const monthMap = {
-            Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
-            Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
-        };
-
-        const [fromMonthStr, fromYearStr] = fromDateStr.split(' ');
-        const [toMonthStr, toYearStr] = toDateStr.split(' ');
-
-        const fromDate = new Date(parseInt(fromYearStr), monthMap[fromMonthStr], 1);
-        const toDate = new Date(parseInt(toYearStr), monthMap[toMonthStr] + 1, 0);
+        const fromDate = new Date(fromDateOrig);
+        const toDate = new Date(toDateOrig);
 
         const year = parseInt(targetDateStr.slice(0, 4));
         const month = parseInt(targetDateStr.slice(4, 6)) - 1;
@@ -153,7 +142,7 @@ const getServiceEnrolleesByGender = async (fromDateOrig, toDateOrig) => {
         }
 
         const enrolleeService = enrollee.service;
-        services[enrolleeService][enrollee.childGender] += 1;
+        services[enrolleeService][enrollee.childGender.toLowerCase()] += 1;
     }
     
     return services;
