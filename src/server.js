@@ -1068,6 +1068,103 @@ app.get('/uploads/:fileName', (req, res) => {
     });
 });
 
+app.delete('/reject-session-request', async (req, res) => {
+    const { sessionRequestId } = req.body;
+
+    const response = await sessionsApi.removeSessionRequest(sessionRequestId);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Request submitted successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+});
+
+app.delete('/reject-appointment-request', async (req, res) => {
+    const { appointmentRequestId } = req.body;
+
+    const response = await appointmentsApi.removeAppointmentRequest(appointmentRequestId);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Request submitted successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+})
+
+app.post('/submit-session-request', async (req, res) => {
+    const { childId, date, time } = req.body;
+
+    const sessionInfo = {
+        id: generateUniqueId('R'),
+        childId,
+        date,
+        time
+    }
+
+    const response = await sessionsApi.saveSessionRequest(sessionInfo);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Request submitted successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+});
+
+app.post('/submit-appointment-request', async (req, res) => {
+    const { childId, date, time } = req.body;
+
+    const appointmentInfo = {
+        id: generateUniqueId('R'),
+        childId,
+        date,
+        time
+    }
+
+    // const response = await sessionsApi.saveSessionRequest(sessionInfo);
+    const response = await appointmentsApi.saveAppointmentRequest(appointmentInfo);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Request submitted successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+});
+
+app.get('/get-all-session-requests', async (req, res) => {
+    const response = await sessionsApi.getSessionRequests();
+    res.send(response);
+});
+
+app.get('/get-all-appointment-requests', async (req, res) => {
+    const response = await appointmentsApi.getAppointmentRequests();
+    res.send(response);
+})
+
 function generateUniqueId(prefix) {
     const now = new Date();
     const uniqueId = `${prefix}${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}` +

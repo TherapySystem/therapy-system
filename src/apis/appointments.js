@@ -4,6 +4,16 @@ const accounts = require('./accounts');
 const snapshotParser = require('./snapshotParser');
 
 const appointmentNode = 'appointments';
+const appointmentReqNode = 'appointments-req';
+
+const saveAppointmentRequest = async (appointmentInfo) => {
+    try {
+        await db.ref(appointmentReqNode).child(appointmentInfo.id).set(appointmentInfo);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
 
 const saveAppointment = async (appointmentInfo) => {
     try {
@@ -12,6 +22,24 @@ const saveAppointment = async (appointmentInfo) => {
     } catch (error) {
         return false;
     }
+}
+
+const getAppointmentRequest = async (id) => {
+    const appointmentRequest = snapshotParser.snapshotParseObject(await db.ref(appointmentReqNode).child(id).once('value'));
+    return appointmentRequest;
+}
+
+const getAppointmentRequests = async () => {
+    const appointmentRequests = await db.ref(appointmentReqNode).once('value');
+    const formattedAppointments = snapshotParser.snapshotParserWithIds(appointmentRequests);
+
+    
+    for (let i = 0; i < formattedAppointments.length; i++) {
+        formattedAppointments[i].child = snapshotParser.snapshotParseObject(await children.getChildById(formattedAppointments[i].childId));
+        formattedAppointments[i].child.therapist = snapshotParser.snapshotParseObject(await accounts.getAccountById(formattedAppointments[i].child.therapistId));
+    }
+
+    return formattedAppointments;
 }
 
 const getAppointments = async (keyword) => {
@@ -65,6 +93,17 @@ const appointmentCancelled = async (id) => {
     }
 }
 
+const removeAppointmentRequest = async (id) => {
+    try {
+        console.log(id);
+        await db.ref(appointmentReqNode).child(id).remove();
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 const getAppointmentsByTherapist = async (keyword, id) => {
     const appointments = await getAppointments(keyword);
 
@@ -78,9 +117,13 @@ const getAppointmentsByChild = async (id) => {
 
 module.exports = {
     saveAppointment,
+    saveAppointmentRequest,
     getAppointments,
+    getAppointmentRequests,
+    getAppointmentRequest,
     getAppointmentsByTherapist,
     getAppointmentsByChild,
     appointmentDone,
-    appointmentCancelled
+    appointmentCancelled,
+    removeAppointmentRequest
 }

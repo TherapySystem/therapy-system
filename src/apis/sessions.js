@@ -4,6 +4,16 @@ const accounts = require('./accounts');
 const snapshotParser = require('./snapshotParser');
 
 const sessionNode = 'sessions';
+const sessionReqNode = 'sessessions-req';
+
+const saveSessionRequest = async (sessionInfo) => {
+    try {
+        await db.ref(sessionReqNode).child(sessionInfo.id).set(sessionInfo);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
 
 const saveSession = async (sessionInfo) => {
     try {
@@ -12,6 +22,23 @@ const saveSession = async (sessionInfo) => {
     } catch (error) {
         return false;
     }
+}
+
+const getSessionRequest = async (id) => {
+    const sessionRequest = snapshotParser.snapshotParseObject(await db.ref(sessionReqNode).child(id).once('value'));
+    return sessionRequest;
+}
+
+const getSessionRequests = async () => {
+    const sessionRequests = await db.ref(sessionReqNode).once('value');
+    const formattedSessions = snapshotParser.snapshotParserWithIds(sessionRequests);
+    
+    for (let i = 0; i < formattedSessions.length; i++) {
+        formattedSessions[i].child = snapshotParser.snapshotParseObject(await children.getChildById(formattedSessions[i].childId));
+        formattedSessions[i].child.therapist = snapshotParser.snapshotParseObject(await accounts.getAccountById(formattedSessions[i].child.therapistId));
+    }
+
+    return formattedSessions;
 }
 
 const getSessions = async (keyword) => {
@@ -65,6 +92,15 @@ const sessionCancelled = async (id) => {
     }
 }
 
+const removeSessionRequest = async (id) => {
+    try {
+        await db.ref(sessionReqNode).child(id).remove();
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
 const getSessionsByTherapist = async (keyword, id) => {
     const sessions = await getSessions(keyword);
 
@@ -78,9 +114,13 @@ const getSessionsByChild = async (id) => {
 
 module.exports = {
     saveSession,
+    saveSessionRequest,
     getSessions,
+    getSessionRequests,
+    getSessionRequest,
     getSessionsByTherapist,
     getSessionsByChild,
     sessionDone,
-    sessionCancelled
+    sessionCancelled,
+    removeSessionRequest
 }

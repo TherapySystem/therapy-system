@@ -36,6 +36,18 @@ const loadAllAppointments = async (keyword) => {
     return await fetchAllAppointments.json();
 }
 
+const loadAllRequestAppointments = async () => {
+    const fetchAllRequestSessions = await fetch('/get-all-appointment-requests', {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    return await fetchAllRequestSessions.json();
+}
+
 const saveAppointment = async (therapistId, childId, appointmentDateTime) => {
     showLoadingScreen('Saving appointment...');
     const fetchSaveAppointmelnt = await fetch('/save-appointment', {
@@ -59,9 +71,26 @@ const saveAppointment = async (therapistId, childId, appointmentDateTime) => {
         const modal = document.getElementById('modal');
         modal.style.display = 'none';
         loadTable();
+        processAppointmentRequests();
     } else {
         showErrorNotification('Error saving appointment!');
     }
+}
+
+const removeAppointmentRequest = async (id) => {
+    const respond = await fetch('/reject-appointment-request', {
+        method: 'DELETE',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            appointmentRequestId: id
+        })
+    });
+
+    const result = await respond.json();
+    return result;
 }
 
 const updateAppointment = async (id, mode) => {
@@ -167,10 +196,11 @@ const loadTable = async () => {
 
     for (var i = 0; i < allAppointments.length; i++) {
         const appointment = allAppointments[i];
+        const newAppointmentDateTime = appointment.appointmentDateTime.split(',')[0] + ' 2025' + appointment.appointmentDateTime.split(',')[1];
         const template = `
             <tr id="appointment-${ appointment.id }">
-                <td id="appointment-date">${ appointment.appointmentDateTime.substring(0, 11) }</td>
-                <td id="appointment-time">${ appointment.appointmentDateTime.substring(12) }</td>
+                <td id="appointment-date">${ appointment.appointmentDateTime.indexOf('2025') == -1 ? newAppointmentDateTime.substring(0, 11) : appointment.appointmentDateTime.substring(0, 11) }</td>
+                <td id="appointment-time">${ appointment.appointmentDateTime.indexOf('2025') == -1 ? newAppointmentDateTime.substring(12) : appointment.appointmentDateTime.substring(12) }</td>
                 <td id="appointment-therapist">${ appointment.therapist.name }</td>
                 <td id="appointment-child">${ appointment.child.childFirstName } ${ appointment.child.childMiddleName } ${ appointment.child.childLastName }</td>
                 <td id="appointment-action">
@@ -198,5 +228,64 @@ const loadTable = async () => {
     hideLoadingScreen();
 }
 
+const processAppointmentRequests = async () => {
+    const appointmentRequestSection = document.getElementById('appointment-request-section');
+    const appointmentRequests = await loadAllRequestAppointments();
+
+    if (appointmentRequests.length > 0) {
+        appointmentRequestSection.style.display = 'block';
+    } else {
+        return;
+    }
+
+    const tbody = document.getElementById('tbody-a');
+    tbody.innerHTML = '';
+
+    for (var i = appointmentRequests.length - 1; i >= 0; i--) {
+        const appointment = appointmentRequests[i];
+        const template = `
+            <tr id="appointment-request-${ appointment.id }">
+                <td id="appointment-request-date">${ appointment.date }</td>
+                <td id="appointment-request-time">${ appointment.time }</td>
+                <td id="appointment-request-therapist">${ appointment.child.therapist.name }</td>
+                <td id="appointment-request-child">${ appointment.child.childFirstName } ${ appointment.child.childMiddleName } ${ appointment.child.childLastName }</td>
+                <td id="appointment-action">
+                    <svg id="accept-button-${ appointment.id }" width="100%" height="100%" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <line class="cls-1" x1="3" x2="12" y1="16" y2="25"/>
+                        <line class="cls-1" x1="12" x2="29" y1="25" y2="7"/>
+                    </svg>
+                    <svg id="reject-button-${ appointment.id }" width="100%" height="100%" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                        <rect id="Icons" x="-256" y="-256" width="1280" height="800" style="fill:none;"/>
+                        <path id="denied" d="M32.266,7.951c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-15.616,11.465c-2.759,3.433 -4.411,7.792 -4.411,12.535c0,11.053 8.974,20.027 20.027,20.027c4.743,0 9.102,-1.652 12.534,-4.411l-28.15,-28.151Zm31.048,25.295c2.87,-3.466 4.596,-7.913 4.596,-12.76c0,-11.054 -8.974,-20.028 -20.028,-20.028c-4.847,0 -9.294,1.726 -12.76,4.596l28.192,28.192Z"/>
+                    </svg>
+                </td>
+            </tr>`;
+        tbody.insertAdjacentHTML('beforeend', template);
+        const doneButton = document.getElementById(`accept-button-${ appointment.id }`);
+        const cancelButton = document.getElementById(`reject-button-${ appointment.id }`);
+        doneButton.addEventListener('click', () => {
+            const therapistId = appointment.child.therapistId;
+            const childId = appointment.childId;
+            const appointmentDateTime = `${appointment.date}, ${appointment.time}`;
+            saveAppointment(therapistId, childId, appointmentDateTime);
+            removeAppointmentRequest(appointment.id);
+        });
+        cancelButton.addEventListener('click', async () => {
+            showLoadingScreen("Rejecting Appointment request...");
+            const response = await removeAppointmentRequest(appointment.id);
+            hideLoadingScreen();
+
+            if (response.status === 'success') {
+                showSuccessNotification('Appointment request rejected  successfully!');
+                loadTable();
+                processAppointmentRequests();
+            } else {
+                showErrorNotification('Error rejecting Appointment request!');
+            }
+        });
+    }
+}
+
 loadFunctions();
 loadTable();
+processAppointmentRequests();

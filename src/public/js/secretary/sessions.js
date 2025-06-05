@@ -36,6 +36,18 @@ const loadAllSessions = async (keyword) => {
     return await fetchAllSessions.json();
 }
 
+const loadAllRequestSessions = async () => {
+    const fetchAllRequestSessions = await fetch('/get-all-session-requests', {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    return await fetchAllRequestSessions.json();
+}
+
 const saveSession = async (therapistId, childId, sessionDateTime) => {
     showLoadingScreen('Saving session...');
     const fetchSaveSession = await fetch('/save-session', {
@@ -59,9 +71,26 @@ const saveSession = async (therapistId, childId, sessionDateTime) => {
         const modal = document.getElementById('modal');
         modal.style.display = 'none';
         loadTable();
+        processSessionRequests();
     } else {
         showErrorNotification('Error saving session!');
     }
+}
+
+const removeSessionRequest = async (id) => {
+    const respond = await fetch('/reject-session-request', {
+        method: 'DELETE',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            sessionRequestId: id
+        })
+    });
+
+    const result = await respond.json();
+    return result;
 }
 
 const updateSession = async (id, mode) => {
@@ -196,5 +225,64 @@ const loadTable = async () => {
     hideLoadingScreen();
 }
 
+const processSessionRequests = async () => {
+    const sessionRequestSection = document.getElementById('session-request-section');
+    const sessionRequests = await loadAllRequestSessions();
+
+    if (sessionRequests.length > 0) {
+        sessionRequestSection.style.display = 'block';
+    } else {
+        return;
+    }
+
+    const tbody = document.getElementById('tbody-sr');
+    tbody.innerHTML = '';
+
+    for (var i = sessionRequests.length - 1; i >= 0; i--) {
+        const session = sessionRequests[i];
+        const template = `
+            <tr id="session-request-${ session.id }">
+                <td id="session-request-date">${ session.date }</td>
+                <td id="session-request-time">${ session.time }</td>
+                <td id="session-request-therapist">${ session.child.therapist.name }</td>
+                <td id="session-request-child">${ session.child.childFirstName } ${ session.child.childMiddleName } ${ session.child.childLastName }</td>
+                <td id="session-action">
+                    <svg id="accept-button-${ session.id }" width="100%" height="100%" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <line class="cls-1" x1="3" x2="12" y1="16" y2="25"/>
+                        <line class="cls-1" x1="12" x2="29" y1="25" y2="7"/>
+                    </svg>
+                    <svg id="reject-button-${ session.id }" width="100%" height="100%" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                        <rect id="Icons" x="-256" y="-256" width="1280" height="800" style="fill:none;"/>
+                        <path id="denied" d="M32.266,7.951c13.246,0 24,10.754 24,24c0,13.246 -10.754,24 -24,24c-13.246,0 -24,-10.754 -24,-24c0,-13.246 10.754,-24 24,-24Zm-15.616,11.465c-2.759,3.433 -4.411,7.792 -4.411,12.535c0,11.053 8.974,20.027 20.027,20.027c4.743,0 9.102,-1.652 12.534,-4.411l-28.15,-28.151Zm31.048,25.295c2.87,-3.466 4.596,-7.913 4.596,-12.76c0,-11.054 -8.974,-20.028 -20.028,-20.028c-4.847,0 -9.294,1.726 -12.76,4.596l28.192,28.192Z"/>
+                    </svg>
+                </td>
+            </tr>`;
+        tbody.insertAdjacentHTML('beforeend', template);
+        const doneButton = document.getElementById(`accept-button-${ session.id }`);
+        const cancelButton = document.getElementById(`reject-button-${ session.id }`);
+        doneButton.addEventListener('click', () => {
+            const therapistId = session.child.therapistId;
+            const childId = session.childId;
+            const sessionDateTime = `${session.date}, ${session.time}`;
+            saveSession(therapistId, childId, sessionDateTime);
+            removeSessionRequest(session.id);
+        });
+        cancelButton.addEventListener('click', async () => {
+            showLoadingScreen("Rejecting session request...");
+            const response = await removeSessionRequest(session.id);
+            hideLoadingScreen();
+
+            if (response.status === 'success') {
+                showSuccessNotification('Session request rejected  successfully!');
+                loadTable();
+                processSessionRequests();
+            } else {
+                showErrorNotification('Error rejecting session request!');
+            }
+        });
+    }
+}
+
 loadFunctions();
 loadTable();
+processSessionRequests();

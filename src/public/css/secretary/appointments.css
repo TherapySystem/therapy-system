@@ -257,3 +257,9 @@
     font-size: 16px;
     cursor: pointer;
 }
+
+#appointment-request-section {
+    display: none;
+    flex-grow: 1;
+    margin-inline: 25px;
+}

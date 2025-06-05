@@ -30,6 +30,21 @@
 #new-session:hover {
     background-color: #0f800b;
 }
+
+#session-requests {
+    width: 25px;
+    height: 25px;
+    background-color: #12a80d;
+    padding: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+#session-requests:hover {
+    background-color: #0f800b;
+}
   
 .search-input {
     width: 200px;
@@ -255,4 +270,10 @@
     border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
+}
+
+#session-request-section {
+    display: none;
+    flex-grow: 1;
+    margin-inline: 25px;
 }
