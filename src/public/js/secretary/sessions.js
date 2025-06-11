@@ -1,3 +1,5 @@
+let requestShowing = false;
+
 const loadTherapist = async () => {
     const fetchTherapist = await fetch('/get-all-therapist', {
         method: 'PUT',
@@ -124,10 +126,22 @@ const loadFunctions = async () => {
     const confirmButton = document.getElementById('confirm-button');
     const modal = document.getElementById('modal');
     const closeModal = document.querySelector('.close');
+    const switchButton = document.getElementById('switch-button');
 
     const therapistSelection = document.getElementById('therapist');
     const childSelection = document.getElementById('child');
     const sessionDateTime = document.getElementById('sessionDateTime');
+    
+    switchButton.addEventListener('click', () => {
+        const sessionRequestSection = document.getElementById('session-request-section');
+        const sessionTable = document.getElementById('sessions-table');
+
+        sessionRequestSection.style.display = requestShowing ? 'none' : 'block';
+        sessionTable.style.display = !requestShowing ? 'none' : 'table';
+        switchButton.innerText = !requestShowing ? 'Show Sessions' : 'Show Requests';
+
+        requestShowing = !requestShowing;
+    });
     
     closeModal.addEventListener('click', () => {
         modal.style.display = 'none';
@@ -229,11 +243,11 @@ const processSessionRequests = async () => {
     const sessionRequestSection = document.getElementById('session-request-section');
     const sessionRequests = await loadAllRequestSessions();
 
-    if (sessionRequests.length > 0) {
-        sessionRequestSection.style.display = 'block';
-    } else {
-        return;
-    }
+    // if (sessionRequests.length > 0) {
+    //     sessionRequestSection.style.display = 'block';
+    // } else {
+    //     return;
+    // }
 
     const tbody = document.getElementById('tbody-sr');
     tbody.innerHTML = '';
