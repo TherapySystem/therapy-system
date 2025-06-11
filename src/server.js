@@ -1214,7 +1214,7 @@ app.get('/get-all-appointment-requests', async (req, res) => {
     res.send(response);
 })
 
-app.get('/get-all-notification-data', async (req, res) => {
+app.put('/get-all-notification-data', async (req, res) => {
     const { id } = req.body;
     
     const response = await notifsApi.getNotifByChild(id);
