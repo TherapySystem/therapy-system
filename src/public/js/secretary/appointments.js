@@ -1,3 +1,5 @@
+let requestShowing = false;
+
 const loadTherapist = async () => {
     const fetchTherapist = await fetch('/get-all-therapist', {
         method: 'PUT',
@@ -124,11 +126,22 @@ const loadFunctions = async () => {
     const confirmButton = document.getElementById('confirm-button');
     const modal = document.getElementById('modal');
     const closeModal = document.querySelector('.close');
+    const switchButton = document.getElementById('switch-button');
 
     const therapistSelection = document.getElementById('therapist');
     const childSelection = document.getElementById('child');
     const appointmentDateTime = document.getElementById('appointmentDateTime');
     
+    switchButton.addEventListener('click', () => {
+        const appointmentRequestSection = document.getElementById('appointment-request-section');
+        const appointmentTable = document.getElementById('appointments-table');
+
+        appointmentRequestSection.style.display = requestShowing ? 'none' : 'block';
+        appointmentTable.style.display = !requestShowing ? 'none' : 'table';
+        switchButton.innerText = !requestShowing ? 'Show Appointments' : 'Show Requests';
+
+        requestShowing = !requestShowing;
+    });
     closeModal.addEventListener('click', () => {
         modal.style.display = 'none';
     });
@@ -229,14 +242,13 @@ const loadTable = async () => {
 }
 
 const processAppointmentRequests = async () => {
-    const appointmentRequestSection = document.getElementById('appointment-request-section');
     const appointmentRequests = await loadAllRequestAppointments();
 
-    if (appointmentRequests.length > 0) {
-        appointmentRequestSection.style.display = 'block';
-    } else {
-        return;
-    }
+    // if (appointmentRequests.length > 0) {
+    //     appointmentRequestSection.style.display = 'block';
+    // } else {
+    //     return;
+    // }
 
     const tbody = document.getElementById('tbody-a');
     tbody.innerHTML = '';
@@ -269,6 +281,8 @@ const processAppointmentRequests = async () => {
             const appointmentDateTime = `${appointment.date}, ${appointment.time}`;
             saveAppointment(therapistId, childId, appointmentDateTime);
             removeAppointmentRequest(appointment.id);
+            loadTable();
+            processAppointmentRequests();
         });
         cancelButton.addEventListener('click', async () => {
             showLoadingScreen("Rejecting Appointment request...");
