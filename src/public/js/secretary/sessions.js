@@ -79,7 +79,7 @@ const saveSession = async (therapistId, childId, sessionDateTime) => {
     }
 }
 
-const removeSessionRequest = async (id) => {
+const removeSessionRequest = async (id, childId, sessionDateTime, isAccepted) => {
     const respond = await fetch('/reject-session-request', {
         method: 'DELETE',
         credentials: "include",
@@ -87,7 +87,10 @@ const removeSessionRequest = async (id) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            sessionRequestId: id
+            sessionRequestId: id,
+            childId,
+            sessionDateTime,
+            isAccepted
         })
     });
 
@@ -279,11 +282,14 @@ const processSessionRequests = async () => {
             const childId = session.childId;
             const sessionDateTime = `${session.date}, ${session.time}`;
             saveSession(therapistId, childId, sessionDateTime);
-            removeSessionRequest(session.id);
+            removeSessionRequest(session.id, childId, sessionDateTime, true);
+            loadTable();
+            processSessionRequests();
         });
         cancelButton.addEventListener('click', async () => {
             showLoadingScreen("Rejecting session request...");
-            const response = await removeSessionRequest(session.id);
+            const sessionDateTime = `${session.date}, ${session.time}`;
+            const response = await removeSessionRequest(session.id, session.childId, sessionDateTime, false);
             hideLoadingScreen();
 
             if (response.status === 'success') {

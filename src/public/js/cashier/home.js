@@ -112,7 +112,7 @@ const loadFunctions = async () => {
     hideLoadingScreen();
 }
 
-const setBillingFunction = async (billingId, isApprove) => {
+const setBillingFunction = async (billingId, childId, isApprove) => {
     showLoadingScreen("Adding new billing...");
     const validSession = document.getElementById(`validSession_${ billingId }`).value;
     const fetchSetBilling = await fetch('/billing-status', {
@@ -124,7 +124,8 @@ const setBillingFunction = async (billingId, isApprove) => {
         body: JSON.stringify({
             billingId,
             status: isApprove ? 'Approved' : 'Declined',
-            validSession: isApprove ? validSession : 0
+            validSession: isApprove ? validSession : 0,
+            childId
         })
     });
 
@@ -223,15 +224,17 @@ const loadTable = async () => {
             const actionBilling = document.getElementById(`action-${ billing.id }`);
             const statusBilling = document.getElementById(`status_${ billing.id }`);
             const validSessionValue = document.getElementById(`validSession_${ billing.id }`).value;
+
+            const childId = billing.childId;
             
             approveBilling.addEventListener('click', async () => {
-                await setBillingFunction(billing.id, true);
+                await setBillingFunction(billing.id, childId, true);
                 actionBilling.innerHTML = 'Approved';
                 statusBilling.innerHTML = validSessionValue;
             });
 
             declineBilling.addEventListener('click', async () => {
-                await setBillingFunction(billing.id, false);
+                await setBillingFunction(billing.id, childId, false);
                 actionBilling.innerHTML = 'Declined';
                 statusBilling.innerHTML = 'N/A';
             });

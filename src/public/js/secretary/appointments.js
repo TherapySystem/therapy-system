@@ -79,7 +79,7 @@ const saveAppointment = async (therapistId, childId, appointmentDateTime) => {
     }
 }
 
-const removeAppointmentRequest = async (id) => {
+const removeAppointmentRequest = async (id, childId, appointmentDateTime, isAccepted) => {
     const respond = await fetch('/reject-appointment-request', {
         method: 'DELETE',
         credentials: "include",
@@ -87,7 +87,10 @@ const removeAppointmentRequest = async (id) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            appointmentRequestId: id
+            appointmentRequestId: id,
+            childId,
+            appointmentDateTime,
+            isAccepted
         })
     });
 
@@ -280,13 +283,14 @@ const processAppointmentRequests = async () => {
             const childId = appointment.childId;
             const appointmentDateTime = `${appointment.date}, ${appointment.time}`;
             saveAppointment(therapistId, childId, appointmentDateTime);
-            removeAppointmentRequest(appointment.id);
+            removeAppointmentRequest(appointment.id, appointment.childId, appointmentDateTime, true);
             loadTable();
             processAppointmentRequests();
         });
         cancelButton.addEventListener('click', async () => {
             showLoadingScreen("Rejecting Appointment request...");
-            const response = await removeAppointmentRequest(appointment.id);
+            const appointmentDateTime = `${appointment.date}, ${appointment.time}`;
+            const response = await removeAppointmentRequest(appointment.id, appointment.childId, appointmentDateTime, false);
             hideLoadingScreen();
 
             if (response.status === 'success') {

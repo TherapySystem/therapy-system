@@ -32,6 +32,7 @@ const snapshotParser = require('./apis/snapshotParser');
 // const vacanciesApi = require('./apis/vacancies');
 const chatsApi = require('./apis/chats');
 const announcementApi = require('./apis/announcements');
+const notifsApi = require('./apis/notifications');
 
 const { verifyToken, noToken } = require('./middleware/jwt_verifier');
 
@@ -668,8 +669,10 @@ app.post('/submit-payment', async (req, res) => {
     const today = moment().format('YYYYMMDD');
     const filename = `${childId}_${today}`;
 
+    const id = generateUniqueId('B');
+
     const billingInfo = {
-        id: generateUniqueId('B'),
+        id,
         childId,
         amount,
         paymentDate: moment().format('MMMM DD YYYY'),
@@ -688,6 +691,7 @@ app.post('/submit-payment', async (req, res) => {
     if (response) {
         returnResponse.status = 'success';
         returnResponse.message = 'Billing added successfully!';
+        returnResponse.id = id;
     } else {
         returnResponse.status = 'error';
         returnResponse.message = 'Something went wrong, try again later';
@@ -697,7 +701,14 @@ app.post('/submit-payment', async (req, res) => {
 });
 
 app.post('/billing-status', async (req, res) => {
-    const { billingId, status, validSession } = req.body;
+    const { billingId, status, validSession, childId } = req.body;
+
+    await notifsApi.saveNotif({
+        id: generateUniqueId('N'),
+        childId,
+        isAccepted: status == 'Approved',
+        type: 'payment'
+    })
 
     const returnResponse = {};
     
@@ -1085,7 +1096,15 @@ app.get('/uploads/:fileName', (req, res) => {
 });
 
 app.delete('/reject-session-request', async (req, res) => {
-    const { sessionRequestId } = req.body;
+    const { sessionRequestId, childId, sessionDateTime, isAccepted } = req.body;
+
+    await notifsApi.saveNotif({
+        id: generateUniqueId('N'),
+        childId,
+        dateTime: sessionDateTime,
+        isAccepted,
+        type: 'session'
+    })
 
     const response = await sessionsApi.removeSessionRequest(sessionRequestId);
     
@@ -1103,7 +1122,15 @@ app.delete('/reject-session-request', async (req, res) => {
 });
 
 app.delete('/reject-appointment-request', async (req, res) => {
-    const { appointmentRequestId } = req.body;
+    const { appointmentRequestId, childId, appointmentDateTime, isAccepted } = req.body;
+
+    await notifsApi.saveNotif({
+        id: generateUniqueId('N'),
+        childId,
+        dateTime: appointmentDateTime,
+        isAccepted,
+        type: 'appointment'
+    })
 
     const response = await appointmentsApi.removeAppointmentRequest(appointmentRequestId);
     
@@ -1123,8 +1150,10 @@ app.delete('/reject-appointment-request', async (req, res) => {
 app.post('/submit-session-request', async (req, res) => {
     const { childId, date, time } = req.body;
 
+    const id = generateUniqueId('R');
+
     const sessionInfo = {
-        id: generateUniqueId('R'),
+        id,
         childId,
         date,
         time
@@ -1137,6 +1166,7 @@ app.post('/submit-session-request', async (req, res) => {
     if (response) {
         returnResponse.status = 'success';
         returnResponse.message = 'Request submitted successfully!';
+        returnResponse.id = id;
     } else {
         returnResponse.status = 'error';
         returnResponse.message = 'Something went wrong, try again later';
@@ -1148,8 +1178,10 @@ app.post('/submit-session-request', async (req, res) => {
 app.post('/submit-appointment-request', async (req, res) => {
     const { childId, date, time } = req.body;
 
+    const id = generateUniqueId('R');
+
     const appointmentInfo = {
-        id: generateUniqueId('R'),
+        id,
         childId,
         date,
         time
@@ -1163,6 +1195,7 @@ app.post('/submit-appointment-request', async (req, res) => {
     if (response) {
         returnResponse.status = 'success';
         returnResponse.message = 'Request submitted successfully!';
+        returnResponse.id = id;
     } else {
         returnResponse.status = 'error';
         returnResponse.message = 'Something went wrong, try again later';
@@ -1180,6 +1213,14 @@ app.get('/get-all-appointment-requests', async (req, res) => {
     const response = await appointmentsApi.getAppointmentRequests();
     res.send(response);
 })
+
+app.get('/get-all-notification-data', async (req, res) => {
+    const { id } = req.body;
+    
+    const response = await notifsApi.getNotifByChild(id);
+
+    res.send(response);
+});
 
 function generateUniqueId(prefix) {
     const now = new Date();
