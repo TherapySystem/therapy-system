@@ -2594,6 +2594,28 @@ const developmental = {
     ]
 };
 
+const db = require('../fb_config/fb_config');
+const snapshotParser = require('./snapshotParser');
+
+const serviceNode = 'services';
+
+const services = ['Occupational Therapy', 'Shadow Class', 'Speech Therapy', 'Developmental Class'];
+const idPrefixes = ['ot', 'sc', 'st', 'dc'];
+const levelPrefixes = ['lp', 'p', 'hp'];
+
+const idPrefixToService = {
+    'Occupational Therapy': 'ot',
+    'Shadow Class': 'sc',
+    'Speech Therapy': 'st',
+    'Developmental Class': 'dc'
+}
+
+const levelToPrefix = {
+    'Low Performing': 'lp',
+    'Plateau': 'p',
+    'High Performing': 'hp'
+}
+
 const serviceActivities = {
     'Occupational Therapy': occupational,
     'Shadow Class': shadow,
@@ -2625,7 +2647,94 @@ const getRecommendedActivities = (service, variableScores) => {
     return recommendedActivities;
 };
 
+const getServiceActivity = async (service) => {
+    try {
+        const orderedAndSortedActivities = {};
+        
+        const criterias = snapshotParser.snapshotParserWithIds(await db.ref(`${serviceNode}/${idPrefixToService[service]}`).once('value'));
+        for (var i = 0; i < criterias.length; i++) {
+            const criteria = criterias[i];
+            orderedAndSortedActivities[criteria.id] = criteria;
+        }
+
+        return orderedAndSortedActivities;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const getAllActivities = async (service) => {
+    if (service == 'All') {
+        const allActivities = {};
+        allActivities[services[0]] = await getAllActivities(services[0]);
+        allActivities[services[1]] = await getAllActivities(services[1]);
+        allActivities[services[2]] = await getAllActivities(services[2]);
+        allActivities[services[3]] = await getAllActivities(services[3]);
+
+        return allActivities;
+    } else {
+        return await getServiceActivity(service);
+    }
+}
+
+const getNewId = async (service, criteria, level) => {
+    const activities = snapshotParser.snapshotParserWithIds(await db.ref(`${serviceNode}/${idPrefixToService[service]}/${criteria}/${levelToPrefix[level]}`).once('value'));
+    return activities.length + 1;
+}
+
+const addActivity = async (activityInfo) => {
+    try {
+        await db.ref(`${serviceNode}/${idPrefixToService[activityInfo.service]}/${activityInfo.criteria}/${levelToPrefix[activityInfo.level]}/${activityInfo.id}`).set(activityInfo);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+const deleteActivity = async (service, criteria, level, number) => {
+    try {
+        await db.ref(`${serviceNode}/${idPrefixToService[service]}/${criteria}/${levelToPrefix[level]}/${number}`).remove();
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+const moveServicesOnline = async () => {
+    var total = 0;
+    for (var i = 0; i < services.length; i++) {
+        const service = services[i];
+        const serviceVariables = getServiceVariables(service);
+        for (var j = 0; j < serviceVariables.length; j++) {
+            const variable = serviceVariables[j];
+            
+            const categorizedActivities = serviceActivities[service][variable];
+
+            const levels = ['Low Performing', 'Plateau', 'High Performing'];
+            for (var k = 0; k < categorizedActivities.length; k++) {
+                const activity = categorizedActivities[k];
+                const actInfo = {
+                    id: `${(k%10) + 1}`,
+                    service,
+                    criteria: variable,
+                    level: levels[Math.floor(k / 10)],
+                    name: activity.title,
+                    description: activity.description,
+                    link: activity.link
+                }
+                await db.ref(`${serviceNode}/${idPrefixes[i]}/${variable}/${levelToPrefix[actInfo.level]}`).child(actInfo.id).set(actInfo);
+                total++;
+                console.log('Done ', total);
+            }
+        }
+    }
+}
+
 module.exports = {
     getServiceVariables,
-    getRecommendedActivities
+    getRecommendedActivities,
+    getAllActivities,
+    getNewId,
+    addActivity,
+    deleteActivity
 }

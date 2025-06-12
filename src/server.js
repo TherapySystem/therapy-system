@@ -232,6 +232,10 @@ app.get('/therapist/activities', verifyToken('therapist'), async (req, res) => {
     res.sendFile(path.join(publicPath, '../views/therapist/activities.html'));
 });
 
+app.get('/therapist/manage-activities', verifyToken('therapist'), async (req, res) => {
+    res.sendFile(path.join(publicPath, '../views/therapist/manage_activities.html'));
+});
+
 // Application
 app.post('/child-login', async (req, res) => {
     const { username, password } = req.body;
@@ -1220,6 +1224,105 @@ app.put('/get-all-notification-data', async (req, res) => {
     const response = await notifsApi.getNotifByChild(id);
 
     res.send(response);
+});
+
+app.put('/get-activities', async (req, res) => {
+    const { service } = req.body;
+    
+    const response = await servicesApi.getAllActivities(service);
+    res.send(response);
+});
+
+app.post('/update-activity', async (req, res) => {
+    const {
+        id,
+        service,
+        criteria,
+        level,
+        name,
+        description,
+        link
+    } = req.body;
+
+    const activityInfo = {
+        id,
+        service,
+        criteria,
+        level,
+        name,
+        description,
+        link
+    };
+
+    const response = await servicesApi.addActivity(activityInfo);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Activity updated successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+
+});
+
+app.post('/add-new-activity', async (req, res) => {
+    const {
+        service,
+        criteria,
+        level,
+        name,
+        description,
+        link
+    } = req.body;
+
+    const id = await servicesApi.getNewId(service, criteria, level);
+
+    const activityInfo = {
+        id,
+        service,
+        criteria,
+        level,
+        name,
+        description,
+        link
+    };
+
+    const response = await servicesApi.addActivity(activityInfo);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Activity added successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
+});
+
+app.delete('/delete-activity', async (req, res) => {
+    const { service, criteria, level, number } = req.body;
+
+    const response = await servicesApi.deleteActivity(service, criteria, level, number);
+    
+    const returnResponse = {};
+    
+    if (response) {
+        returnResponse.status = 'success';
+        returnResponse.message = 'Activity removed successfully!';
+    } else {
+        returnResponse.status = 'error';
+        returnResponse.message = 'Something went wrong, try again later';
+    }
+
+    res.send(returnResponse);
 });
 
 function generateUniqueId(prefix) {

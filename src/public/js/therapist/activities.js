@@ -39,6 +39,11 @@ const loadSuggestedActivities = async (childId) => {
 
 const loadFunctions = async () => {
     const searchButton = document.getElementById('search-button');
+    const newActivity = document.getElementById('new-activity');
+
+    newActivity.addEventListener('click', () => {
+        window.location.href = '/therapist/manage-activities'
+    });
 
     searchButton.addEventListener('click', () => {
         loadTable();

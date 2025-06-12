@@ -9,6 +9,41 @@
     margin-inline: 25px;
     margin-bottom: 10px;
 }
+
+.headbar .action {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+#new-activity {
+    width: 25px;
+    height: 25px;
+    background-color: #12a80d;
+    padding: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#new-activity:hover {
+    background-color: #0f800b;
+}
+
+#add-activity {
+    width: 25px;
+    height: 25px;
+    background-color: #12a80d;
+    padding: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#add-activity:hover {
+    background-color: #0f800b;
+}
   
 .search-input {
     width: 200px;
@@ -230,6 +265,111 @@
 }
 
 #confirm-button {
+    margin-top: 10px;
+    background-color: #12a80d;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.input-container {
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+}
+  
+.input-container input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #575757;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+  
+.input-container label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #575757;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.3s ease all;
+}
+  
+
+.input-container label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #575757;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.3s ease all;
+    background-color: #fff;
+    padding: 0 5px;
+}
+.input-container input:focus {
+    border-color: #4b8127;
+}
+  
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label {
+    top: 0;
+    font-size: 13px;
+    color: #4b8127;
+    background-color: #fff;
+    padding: 5px;
+}
+  
+.input-container input:focus {
+    outline: none;
+}
+
+.input-container select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #575757;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: #fff;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+.input-container select:focus {
+    border-color: #4b8127;
+    outline: none;
+}
+
+.input-container select:focus + label,
+.input-container select:not([value=""]) + label {
+    top: 0;
+    font-size: 13px;
+    color: #4b8127;
+}
+
+#confirm-button {
+    margin-top: 10px;
+    background-color: #12a80d;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#update-button {
     margin-top: 10px;
     background-color: #12a80d;
     color: white;

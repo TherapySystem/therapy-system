@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/therapist/general.css">
     <link rel="stylesheet" href="/css/therapist/sidebar.css">
     <link rel="stylesheet" href="/css/therapist/activities.css">
-    <title>Therapist - Activities</title>
+    <title>Therapist - Manage Activities</title>
 
     <style>
         th {
@@ -62,19 +62,26 @@
     <div class="main-section">
         <div class="header-section">
             <h2>Welcome!</h2>
-            <h4>Activities</h4>
+            <h4>Manage Activities</h4>
         </div>
         <div class="content-section">
             <div class="headbar">
-                <input id="search-input" type="text" placeholder="Search" class="search-input">
-                <button id="search-button" class="search-button">Search</button>
+                <!-- <input id="search-input" type="text" placeholder="Search" class="search-input"> -->
+                <!-- <button id="search-button" class="search-button">Search</button> -->
+            
+                <div class="input-container" style="width: 200px;">
+                    <select id="service" name="service">
+                        <option value="All" selected>All Services</option>
+                        <option value="Occupational Therapy">Occupational Therapy</option>
+                        <option value="Speech Therapy">Speech Therapy</option>
+                        <option value="Developmental Class">Developmental Class</option>
+                        <option value="Shadow Class">Shadow Class</option>
+                    </select>
+                    <label for="service">Service</label>
+                </div>
                 <div class="action">
-                    <!-- <svg width="100%" height="100%" viewBox="0 0 24 24" id="new-activity" data-name="24x24/On Light/Schedule-Add" xmlns="http://www.w3.org/2000/svg">
-                        <rect id="view-box" width="24" height="24" fill="none"/>
-                        <path id="Shape" d="M2.75,17.5A2.753,2.753,0,0,1,0,14.75v-10A2.754,2.754,0,0,1,2.5,2.012V.75A.75.75,0,0,1,4,.75V2h9.5V.75a.75.75,0,0,1,1.5,0V2.012A2.753,2.753,0,0,1,17.5,4.75v10a2.752,2.752,0,0,1-2.75,2.75ZM1.5,4.75v10A1.251,1.251,0,0,0,2.75,16h12A1.251,1.251,0,0,0,16,14.75v-10A1.251,1.251,0,0,0,14.75,3.5h-12A1.251,1.251,0,0,0,1.5,4.75Zm6.5,8V10.5H5.75a.75.75,0,0,1,0-1.5H8V6.75a.75.75,0,0,1,1.5,0V9h2.25a.75.75,0,0,1,0,1.5H9.5v2.25a.75.75,0,0,1-1.5,0Z" transform="translate(3.25 3.25)" fill="#fff"/>
-                    </svg> -->
-                    <svg id="new-activity" width="100%" height="100%" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="#fff" d="M1468.214 0v564.698h-112.94V112.94H112.94v1694.092h1242.334v-225.879h112.94v338.819H0V0h1468.214Zm129.428 581.311c22.137-22.136 57.825-22.136 79.962 0l225.879 225.879c22.023 22.023 22.023 57.712 0 79.848l-677.638 677.637c-10.616 10.504-24.96 16.49-39.98 16.49h-225.88c-31.17 0-56.469-25.299-56.469-56.47v-225.88c0-15.02 5.986-29.364 16.49-39.867Zm-155.291 314.988-425.895 425.895v146.031h146.03l425.895-425.895-146.03-146.03Zm-764.714 346.047v112.94H338.82v-112.94h338.818Zm225.88-225.88v112.94H338.818v-112.94h564.697Zm734.106-315.44-115.424 115.425 146.03 146.03 115.425-115.423-146.031-146.031ZM1129.395 338.83v451.758H338.82V338.83h790.576Zm-112.94 112.94H451.759v225.878h564.698V451.77Z" fill-rule="evenodd"/>
+                    <svg id="add-activity" width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                 </div>
             </div>
@@ -82,10 +89,11 @@
                 <table id="activity-table" class="children-table">
                     <thead>
                         <tr>
-                            <th onclick="sortTable(0)" >Parent</th>
-                            <th onclick="sortTable(1)" >Child</th>
-                            <th onclick="sortTable(2)" >Availed Service</th>
-                            <th onclick="sortTable(3)" >Activity Date</th>
+                            <th>Services</th>
+                            <th>Listed Criteria</th>
+                            <th>Level</th>
+                            <th>Activity Name</th>
+                            <th>PDF Link</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -98,51 +106,58 @@
 
     <div id="modal" class="modal">
         <div class="modal-content">
+            <span id="close-modal" class="close">&times;</span>
+            <h3 id="title">Add activity</h3>
+            <div class="" style="display: flex; flex-direction: row; gap: 20px;">
+                <div class="input-container" style="width: 200px;">
+                    <select id="service_add" name="service">
+                        <option selected disabled hidden>Choose a Service</option>
+                        <option value="Occupational Therapy">Occupational Therapy</option>
+                        <option value="Speech Therapy">Speech Therapy</option>
+                        <option value="Developmental Class">Developmental Class</option>
+                        <option value="Shadow Class">Shadow Class</option>
+                    </select>
+                    <label for="service">Service</label>
+                </div>
+                <div class="input-container" style="width: 200px;">
+                    <select id="criteria_add" name="criteria">
+                        <option selected disabled hidden>Select a Service First</option>
+                        <!-- <option value="Occupational Therapy">Occupational Therapy</option> -->
+                    </select>
+                    <label for="criteria">Criteria</label>
+                </div>
+                <div class="input-container" style="width: 200px;">
+                    <select id="level_add" name="level">
+                        <option value="Low Performing" selected>Low Performing</option>
+                        <option value="Plateau">Plateau</option>
+                        <option value="High Performing">High Performing</option>
+                    </select>
+                    <label for="level">Level</label>
+                </div>
+            </div>
             
+            <div class="input-container" style="margin-bottom: 20px;">
+                <input type="text" id="actName" name="actName" placeholder=" ">
+                <label for="actName">Activity Name</label>
+            </div>
+            
+            <label for="description">Description</label>
+            <div class="input-container" style="margin-top: 0;">
+                <textarea id="actDescription" name="description" placeholder=" " rows="8" style="width: 80%; font-family: Arial, Helvetica, sans-serif; padding: 10px"></textarea>
+            </div>
+            
+            <div class="input-container">
+                <input type="text" id="actLink" name="actLink" placeholder=" ">
+                <label for="actLink">PDF Link</label>
+            </div>
+
+            <button id="confirm-button">Submit Activity</button>
+            <button id="update-button">Update Activity</button>
         </div>
     </div>
-
-    <div id="activitiesModal" class="modal">
-        <div id="modal-content-activities" class="modal-content">
-            
-        </div>
-    </div>
-
-    <script>
-        let sortDirection = [true, true, true, true, true, true, true, true];
-
-        function sortTable(columnIndex) {
-            let table = document.getElementById("activity-table");
-            let rows = Array.from(table.rows).slice(1);
-            let isAscending = sortDirection[columnIndex];
-
-            rows.sort((rowA, rowB) => {
-                let cellA = rowA.cells[columnIndex].innerText.trim();
-                let cellB = rowB.cells[columnIndex].innerText.trim();
-
-                if (columnIndex === 4) {
-                    let numA = parseFloat(cellA.replace(/[^\d.-]/g, ''));
-                    let numB = parseFloat(cellB.replace(/[^\d.-]/g, ''));
-                    return isAscending ? numA - numB : numB - numA;
-                }
-
-                if (columnIndex === 3) {
-                    let dateA = new Date(cellA);
-                    let dateB = new Date(cellB);
-                    return isAscending ? dateA - dateB : dateB - dateA;
-                }
-
-                return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
-            });
-
-            sortDirection[columnIndex] = !isAscending;
-
-            rows.forEach(row => table.appendChild(row));
-        }
-    </script>
 
     <script src="/js/utilities.js"></script>
-    <script src="/js/therapist/activities.js"></script>
+    <script src="/js/therapist/manage-activities.js"></script>
     <script src="/js/therapist/therapist-sidebar.js"></script>
 </body>
 </html>
